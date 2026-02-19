@@ -1,12 +1,942 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My First Webpage</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UJPhotography — Fine Art Photographer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f4f0ea;
+    --ink: #1a1714;
+    --warm-gray: #8a847c;
+    --gold: #b89c6a;
+    --light-gold: #d4bc8e;
+    --off-white: #faf8f5;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--off-white);
+    color: var(--ink);
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 60px;
+    mix-blend-mode: normal;
+    background: transparent;
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: rgba(250,248,245,0.95); backdrop-filter: blur(8px); }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--off-white);
+    text-decoration: none;
+    transition: color 0.4s;
+  }
+  nav.scrolled .nav-logo { color: var(--ink); }
+
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(250,248,245,0.85);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  nav.scrolled .nav-links a { color: var(--warm-gray); }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 60px 80px;
+    overflow: hidden;
+    background: var(--ink);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(160deg, transparent 40%, rgba(26,23,20,0.65) 100%),
+      linear-gradient(to bottom, rgba(26,23,20,0.15) 0%, transparent 30%, rgba(26,23,20,0.85) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Hero slideshow */
+  .hero-slideshow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.6s ease-in-out;
+    transform: scale(1.04);
+    transition: opacity 1.6s ease-in-out, transform 6s ease-out;
+  }
+
+  .hero-slide.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Slide counter dots */
+  .slide-dots {
+    position: absolute;
+    bottom: 40px;
+    left: 60px;
+    z-index: 3;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .slide-dot {
+    width: 20px;
+    height: 1px;
+    background: rgba(244,240,234,0.3);
+    cursor: pointer;
+    transition: width 0.3s, background 0.3s;
+  }
+
+  .slide-dot.active {
+    width: 40px;
+    background: var(--gold);
+  }
+
+  /* Floating particles */
+  .particles { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: rgba(184,156,106,0.4);
+    border-radius: 50%;
+    animation: float linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) translateX(30px); opacity: 0; }
+  }
+
+  .hero-content { position: relative; z-index: 3; max-width: 700px; }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--cream);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--light-gold); }
+
+  .hero-sub {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: rgba(244,240,234,0.65);
+    line-height: 1.8;
+    max-width: 460px;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.2s forwards;
+  }
+  .scroll-indicator span {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(184,156,106,0.7);
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollLine 2s 1.5s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { transform: scaleY(1); transform-origin: top; }
+    50% { transform: scaleY(0.3); transform-origin: top; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* ABOUT SECTION */
+  .section { padding: 120px 60px; }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .about-image-wrap {
+    position: relative;
+  }
+
+  .about-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background:
+      radial-gradient(ellipse at 50% 30%, #c4a882 0%, #8a6a44 30%, #3d2a18 70%, #1a1209 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 40% 50%, rgba(255,220,160,0.12) 0%, transparent 60%);
+  }
+
+  .photo-accent {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: 20px;
+    bottom: 20px;
+    border: 1px solid var(--gold);
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .photo-label {
+    position: absolute;
+    bottom: 24px;
+    right: -24px;
+    background: var(--ink);
+    color: var(--gold);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    writing-mode: vertical-rl;
+  }
+
+  .section-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.3;
+    max-width: 60px;
+  }
+
+  .about-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 32px;
+    color: var(--ink);
+  }
+  .about-heading em { font-style: italic; color: var(--warm-gray); }
+
+  .about-text p {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: #4a443e;
+    margin-bottom: 20px;
+  }
+
+  .about-text .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+    border-left: 2px solid var(--gold);
+    padding-left: 24px;
+    margin: 36px 0;
+  }
+
+  .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 32px;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gold);
+    transition: gap 0.3s, color 0.3s;
+  }
+  .contact-btn:hover { gap: 24px; color: var(--gold); }
+  .contact-btn::after { content: '→'; font-size: 0.9rem; }
+
+  /* STATS */
+  .stats-bar {
+    background: var(--ink);
+    padding: 60px;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 0 80px;
+    border-right: 1px solid rgba(184,156,106,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item.visible { opacity: 1; transform: translateY(0); }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--light-gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(184,156,106,0.6);
+  }
+
+  /* CLIENTS */
+  .clients-section {
+    padding: 100px 60px;
+    background: var(--cream);
+  }
+
+  .clients-heading {
+    text-align: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 60px;
+  }
+
+  .clients-marquee {
+    overflow: hidden;
+    position: relative;
+  }
+  .clients-marquee::before, .clients-marquee::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .clients-marquee::before { left: 0; background: linear-gradient(to right, var(--cream), transparent); }
+  .clients-marquee::after { right: 0; background: linear-gradient(to left, var(--cream), transparent); }
+
+  .clients-track {
+    display: flex;
+    gap: 80px;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+
+  .client-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--warm-gray);
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+    flex-shrink: 0;
+    transition: opacity 0.3s, color 0.3s;
+  }
+  .client-name:hover { opacity: 1; color: var(--gold); }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* TESTIMONIALS */
+  .testimonials-section {
+    padding: 120px 60px;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .testimonials-section::before {
+    content: '"';
+    position: absolute;
+    top: -40px;
+    left: 40px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30rem;
+    color: rgba(184,156,106,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+
+  .testimonials-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 80px;
+  }
+
+  .testimonials-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    color: var(--cream);
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+
+  .testimonial-card {
+    background: rgba(255,255,255,0.03);
+    padding: 48px 40px;
+    border-top: 1px solid rgba(184,156,106,0.2);
+    transition: background 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s, background 0.3s;
+  }
+  .testimonial-card.visible { opacity: 1; transform: translateY(0); }
+  .testimonial-card:hover { background: rgba(184,156,106,0.05); }
+
+  .testimonial-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    line-height: 1.7;
+    color: rgba(244,240,234,0.75);
+    margin-bottom: 32px;
+  }
+
+  .testimonial-author {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .testimonial-company {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(184,156,106,0.4);
+    margin-top: 4px;
+  }
+
+  /* FEATURED IN */
+  .featured-section {
+    padding: 100px 60px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .featured-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--warm-gray);
+    letter-spacing: 0.1em;
+    margin-bottom: 48px;
+  }
+
+  .featured-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    color: var(--warm-gray);
+    line-height: 2.2;
+  }
+  .featured-list a {
+    color: var(--ink);
+    text-decoration: none;
+    padding: 0 16px;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .featured-list a:hover { color: var(--gold); }
+  .featured-list a::after {
+    content: '·';
+    position: absolute;
+    right: -2px;
+    color: rgba(138,132,124,0.4);
+  }
+  .featured-list a:last-child::after { display: none; }
+
+  /* CTA */
+  .cta-section {
+    padding: 120px 60px;
+    background: var(--cream);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(184,156,106,0.15);
+    pointer-events: none;
+  }
+  .cta-section::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    border: 1px solid rgba(184,156,106,0.1);
+    pointer-events: none;
+  }
+
+  .cta-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .cta-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 48px;
+    color: var(--ink);
+  }
+  .cta-heading em { font-style: italic; color: var(--warm-gray); }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 48px;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: background 0.3s, gap 0.3s;
+  }
+  .cta-btn:hover { background: var(--gold); gap: 24px; }
+  .cta-btn::after { content: '→'; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+  }
+
+  .footer-links { display: flex; gap: 40px; list-style: none; }
+  .footer-links a {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  .footer-copy {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(138,132,124,0.5);
+  }
+
+  /* REVEAL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 24px 60px; }
+    .section, .clients-section, .testimonials-section, .featured-section, .cta-section { padding: 80px 24px; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .stats-bar { flex-direction: column; gap: 48px; padding: 60px 24px; }
+    .stat-item { border-right: none; border-bottom: 1px solid rgba(184,156,106,0.2); padding: 0 0 48px; }
+    .stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 32px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
 </head>
 <body>
-    <h1>Hello World!</h1>
-    <p>This is my first paragraph on my first webpage.</p>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">UJPhotography</a>
+  <ul class="nav-links">
+    <li><a href="#">About</a></li>
+    <li><a href="#">Portfolio</a></li>
+    <li><a href="#">Experience</a></li>
+    <li><a href="#">Education</a></li>
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Hero Slideshow -->
+  <div class="hero-slideshow" id="heroSlideshow">
+    <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1600&q=80')"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1554080353-a576cf803bda?w=1600&q=80')"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1600&q=80')"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1600&q=80')"></div>
+    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1618506479271-e70fc04e9f3e?w=1600&q=80')"></div>
+  </div>
+
+  <div class="hero-bg"></div>
+  <div class="particles" id="particles"></div>
+
+  <!-- Slide dots -->
+  <div class="slide-dots" id="slideDots"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Fine Art Photographer · Serbia</div>
+    <h1 class="hero-title">Crafting<br><em>dreams</em><br>from light</h1>
+    <p class="hero-sub">Where emotion becomes image, and stories transcend the ordinary into the magical.</p>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section">
+  <div class="about-grid">
+    <div class="about-image-wrap reveal">
+      <div class="about-photo"></div>
+      <div class="photo-accent"></div>
+      <div class="photo-label">Fine Art · Portrait · Travel</div>
+    </div>
+
+    <div class="about-text reveal">
+      <div class="section-eyebrow">Meet UJPhotography</div>
+      <h2 class="about-heading">A storyteller<br>through <em>a lens</em></h2>
+      <p>UJPhotography is a fine art photographer from Serbia, whose gift lies in capturing emotion and weaving stories filled with magic and quiet dreams. She works as a full-time photographer and content creator, partnering with brands to bring their visions to life through strikingly beautiful visual narratives.</p>
+      <div class="quote-text">"To photograph is to hold a breath of the world, suspended in light."</div>
+      <p>Her images have been featured in dozens of publications worldwide, including Vogue Italia, Adobe, Digital SLR Magazine, Beautiful Bizarre, and Faerie Magazine. UJPhotography's photographs have graced numerous book covers, and since 2020 she has conducted workshops across the globe to guide emerging photographers toward their creative vision.</p>
+      <p><em>Available for presentations, photo-shoot bookings, and image licensing.</em></p>
+      <a href="#" class="contact-btn">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">14+</div>
+    <div class="stat-label">Years of work</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">40+</div>
+    <div class="stat-label">Publications</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">120+</div>
+    <div class="stat-label">Book covers</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">30+</div>
+    <div class="stat-label">Countries reached</div>
+  </div>
+</div>
+
+<!-- CLIENTS -->
+<section class="clients-section">
+  <div class="clients-heading">Trusted by</div>
+  <div class="clients-marquee">
+    <div class="clients-track" id="marqueeTrack">
+      <span class="client-name">Adobe</span>
+      <span class="client-name">Canon Europe</span>
+      <span class="client-name">Vogue Italia</span>
+      <span class="client-name">Beautiful Bizarre</span>
+      <span class="client-name">Faerie Magazine</span>
+      <span class="client-name">My Modern Met</span>
+      <span class="client-name">BenQ</span>
+      <span class="client-name">Son de Flor</span>
+      <span class="client-name">Grazia Serbia</span>
+      <span class="client-name">Bored Panda</span>
+      <span class="client-name">Practical Photography</span>
+      <span class="client-name">Digital Camera World</span>
+      <!-- duplicates for seamless loop -->
+      <span class="client-name">Adobe</span>
+      <span class="client-name">Canon Europe</span>
+      <span class="client-name">Vogue Italia</span>
+      <span class="client-name">Beautiful Bizarre</span>
+      <span class="client-name">Faerie Magazine</span>
+      <span class="client-name">My Modern Met</span>
+      <span class="client-name">BenQ</span>
+      <span class="client-name">Son de Flor</span>
+      <span class="client-name">Grazia Serbia</span>
+      <span class="client-name">Bored Panda</span>
+      <span class="client-name">Practical Photography</span>
+      <span class="client-name">Digital Camera World</span>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="testimonials-inner">
+    <div class="testimonials-header reveal">
+      <div>
+        <div class="section-eyebrow" style="color:var(--gold);">Testimonials</div>
+        <h2 class="testimonials-title" style="color:var(--cream);">Words from<br><em style="color:var(--light-gold);">collaborators</em></h2>
+      </div>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"Your talent combined with hard work and out-of-the-box ideas always astonishes our team with amazing results. Whenever our designs land in your hands, something beautiful is certain to follow."</p>
+        <div class="testimonial-author">Son de Flor Team</div>
+        <div class="testimonial-company">Linen Fashion Brand</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"UJPhotography exceeds all expectations. I can't imagine how many unusual ideas are hidden in that bright mind she possesses — there seem to be no limits to her creativity."</p>
+        <div class="testimonial-author">Anna H.</div>
+        <div class="testimonial-company">Artist & Collaborator</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"Working with UJPhotography was a dream come true. She interpreted my ideas perfectly and executed them flawlessly. The finished photos are exactly what I wanted, both for my label and personally."</p>
+        <div class="testimonial-author">Lowana</div>
+        <div class="testimonial-company">Vanyanis Designer Label</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"She made beautiful photos and videos of our designs, and some of them became the most viewed images on our social media. Her stunning work made every piece truly the protagonist."</p>
+        <div class="testimonial-author">Costuro Real Team</div>
+        <div class="testimonial-company">Fashion House</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"I've worked with UJPhotography for many years and she is as professional as she is talented. Always fully committed and consistently striving for the best results. A fantastic photographer!"</p>
+        <div class="testimonial-author">Vicente</div>
+        <div class="testimonial-company">BenQ</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">"Her shoots are filled with laughter and happiness which helps me relax and be myself. The pictures which emerge are just amazing and there's always a beautiful meaning behind them."</p>
+        <div class="testimonial-author">Sasha L.</div>
+        <div class="testimonial-company">International Model</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED IN -->
+<section class="featured-section">
+  <div class="section-eyebrow" style="justify-content:center; margin-bottom:8px;">Press</div>
+  <p class="featured-title">As featured in</p>
+  <div class="featured-list">
+    <a href="#">Adobe</a>
+    <a href="#">Beautiful Bizarre Magazine</a>
+    <a href="#">Faerie Magazine</a>
+    <a href="#">Canon Europe</a>
+    <a href="#">Instagram</a>
+    <a href="#">Digital SLR Magazine</a>
+    <a href="#">My Modern Met</a>
+    <a href="#">Vogue Italia</a>
+    <a href="#">Photo Plus Magazine</a>
+    <a href="#">Bella Grace Magazine</a>
+    <a href="#">Grazia Serbia</a>
+    <a href="#">Bored Panda</a>
+    <a href="#">Practical Photography</a>
+    <a href="#">Digital Camera World</a>
+    <a href="#">CreativeLive</a>
+    <a href="#">Photography Week</a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-eyebrow reveal">Let's create together</div>
+  <h2 class="cta-heading reveal">Ready to bring your<br><em>vision to life?</em></h2>
+  <a href="#" class="cta-btn reveal">Get in touch</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">UJPhotography</div>
+  <ul class="footer-links">
+    <li><a href="#">About</a></li>
+    <li><a href="#">Portfolio</a></li>
+    <li><a href="#">Workshops</a></li>
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2024 UJPhotography. All rights reserved.</div>
+</footer>
+
+<script>
+// Slideshow
+const slides = document.querySelectorAll('.hero-slide');
+const dotsContainer = document.getElementById('slideDots');
+let current = 0;
+
+// Create dots
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', () => goTo(i));
+  dotsContainer.appendChild(dot);
+});
+
+function goTo(index) {
+  slides[current].classList.remove('active');
+  dotsContainer.children[current].classList.remove('active');
+  current = index;
+  slides[current].classList.add('active');
+  dotsContainer.children[current].classList.add('active');
+}
+
+setInterval(() => goTo((current + 1) % slides.length), 5000);
+const container = document.getElementById('particles');
+for (let i = 0; i < 20; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (8 + Math.random() * 12) + 's';
+  p.style.animationDelay = (-Math.random() * 20) + 's';
+  p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+  p.style.opacity = 0.3 + Math.random() * 0.4;
+  container.appendChild(p);
+}
+
+// Nav scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal, .stat-item, .testimonial-card').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
