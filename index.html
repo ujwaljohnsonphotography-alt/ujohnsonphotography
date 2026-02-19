@@ -718,11 +718,9 @@
        the demo photos will automatically be replaced.
   ============================================================ -->
   <div class="hero-slideshow" id="heroSlideshow">
-    <div class="hero-slide active" data-local="images/hero1.jpg" data-fallback="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1600&q=80"></div>
-    <div class="hero-slide" data-local="images/hero2.jpg" data-fallback="https://images.unsplash.com/photo-1554080353-a576cf803bda?w=1600&q=80"></div>
-    <div class="hero-slide" data-local="images/hero3.jpg" data-fallback="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1600&q=80"></div>
-    <div class="hero-slide" data-local="images/hero4.jpg" data-fallback="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1600&q=80"></div>
-    <div class="hero-slide" data-local="images/hero5.jpg" data-fallback="https://images.unsplash.com/photo-1618506479271-e70fc04e9f3e?w=1600&q=80"></div>
+    <div class="hero-slide active" style="background-image: url('images/hero1.jpg')"></div>
+    <div class="hero-slide" style="background-image: url('images/hero2.jpg')"></div>
+    <div class="hero-slide" style="background-image: url('images/hero3.jpg')"></div>
   </div>
 
   <div class="hero-bg"></div>
@@ -935,14 +933,14 @@ function navScrollTo(id) {
 // For each hero slide, try loading the local image first.
 // If it fails (file not found), fall back to the demo Unsplash URL.
 // Once you place your own images in images/, the demos are replaced automatically.
-document.querySelectorAll('.hero-slide').forEach(slide => {
-  const local = slide.dataset.local;
-  const fallback = slide.dataset.fallback;
-  const tester = new Image();
-  tester.onload = () => slide.style.backgroundImage = `url('${local}')`;
-  tester.onerror = () => slide.style.backgroundImage = `url('${fallback}')`;
-  tester.src = local;
-});
+// document.querySelectorAll('.hero-slide').forEach(slide => {
+//   const local = slide.dataset.local;
+//   const fallback = slide.dataset.fallback;
+//   const tester = new Image();
+//   tester.onload = () => slide.style.backgroundImage = `url('${local}')`;
+//   tester.onerror = () => slide.style.backgroundImage = `url('${fallback}')`;
+//   tester.src = local;
+// });
 
 // Slideshow
 const slides = document.querySelectorAll('.hero-slide');
