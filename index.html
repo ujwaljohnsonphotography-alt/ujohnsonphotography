@@ -19,6 +19,8 @@
 
   html { scroll-behavior: smooth; }
 
+  section, footer { scroll-margin-top: 80px; }
+
   body {
     font-family: 'Jost', sans-serif;
     background: var(--off-white);
@@ -241,10 +243,17 @@
   .about-photo {
     width: 100%;
     aspect-ratio: 3/4;
-    background:
-      radial-gradient(ellipse at 50% 30%, #c4a882 0%, #8a6a44 30%, #3d2a18 70%, #1a1209 100%);
     position: relative;
     overflow: hidden;
+    background: #1a1209; /* fallback color while image loads */
+  }
+
+  .about-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
   }
 
   .about-photo::after {
@@ -682,26 +691,38 @@
 
 <!-- NAV -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">UJPhotography</a>
+  <a href="javascript:void(0)" onclick="navScrollTo('hero')" class="nav-logo">UJPhotography</a>
   <ul class="nav-links">
-    <li><a href="#">About</a></li>
-    <li><a href="#">Portfolio</a></li>
-    <li><a href="#">Experience</a></li>
-    <li><a href="#">Education</a></li>
-    <li><a href="#">Shop</a></li>
-    <li><a href="#">Contact</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('about')">About</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('portfolio')">Portfolio</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('testimonials')">Testimonials</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('experience')">Press</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('contact')">Contact</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero">
   <!-- Hero Slideshow -->
+  <!-- ============================================================
+       HERO SLIDESHOW IMAGES
+       To replace with your own photos:
+       1. Add your images to the  images/  folder next to index.html
+       2. Name them: hero1.jpg, hero2.jpg, hero3.jpg, hero4.jpg, hero5.jpg
+          OR change the src values below to match your filenames.
+       Recommended size: 1600px wide. Both landscape & portrait work.
+       Add or remove <div> lines to change the number of slides.
+
+       Currently showing: demo photos from Unsplash (via onerror fallback)
+       Once you place your own images in the images/ folder,
+       the demo photos will automatically be replaced.
+  ============================================================ -->
   <div class="hero-slideshow" id="heroSlideshow">
-    <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1600&q=80')"></div>
-    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1554080353-a576cf803bda?w=1600&q=80')"></div>
-    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1600&q=80')"></div>
-    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1600&q=80')"></div>
-    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1618506479271-e70fc04e9f3e?w=1600&q=80')"></div>
+    <div class="hero-slide active" data-local="images/hero1.jpg" data-fallback="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1600&q=80"></div>
+    <div class="hero-slide" data-local="images/hero2.jpg" data-fallback="https://images.unsplash.com/photo-1554080353-a576cf803bda?w=1600&q=80"></div>
+    <div class="hero-slide" data-local="images/hero3.jpg" data-fallback="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1600&q=80"></div>
+    <div class="hero-slide" data-local="images/hero4.jpg" data-fallback="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1600&q=80"></div>
+    <div class="hero-slide" data-local="images/hero5.jpg" data-fallback="https://images.unsplash.com/photo-1618506479271-e70fc04e9f3e?w=1600&q=80"></div>
   </div>
 
   <div class="hero-bg"></div>
@@ -723,10 +744,24 @@
 </section>
 
 <!-- ABOUT -->
-<section class="section">
+<section class="section" id="about">
   <div class="about-grid">
     <div class="about-image-wrap reveal">
-      <div class="about-photo"></div>
+      <!-- ============================================================
+           ABOUT / PROFILE PHOTO
+           Replace with your portrait photo:
+           1. Add your image to the images/ folder
+           2. Name it: about.jpg
+              OR change the src below to match your filename.
+           Recommended: portrait orientation (e.g. 800×1067px)
+      ============================================================ -->
+      <div class="about-photo">
+        <img
+          src="images/about.jpg"
+          data-fallback="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
+          onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback}"
+          alt="UJPhotography portrait" />
+      </div>
       <div class="photo-accent"></div>
       <div class="photo-label">Fine Art · Portrait · Travel</div>
     </div>
@@ -738,7 +773,7 @@
       <div class="quote-text">"To photograph is to hold a breath of the world, suspended in light."</div>
       <p>Her images have been featured in dozens of publications worldwide, including Vogue Italia, Adobe, Digital SLR Magazine, Beautiful Bizarre, and Faerie Magazine. UJPhotography's photographs have graced numerous book covers, and since 2020 she has conducted workshops across the globe to guide emerging photographers toward their creative vision.</p>
       <p><em>Available for presentations, photo-shoot bookings, and image licensing.</em></p>
-      <a href="#" class="contact-btn">Get in touch</a>
+      <a href="javascript:void(0)" onclick="navScrollTo('contact')" class="contact-btn">Get in touch</a>
     </div>
   </div>
 </section>
@@ -764,7 +799,7 @@
 </div>
 
 <!-- CLIENTS -->
-<section class="clients-section">
+<section class="clients-section" id="portfolio">
   <div class="clients-heading">Trusted by</div>
   <div class="clients-marquee">
     <div class="clients-track" id="marqueeTrack">
@@ -798,7 +833,7 @@
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="testimonials-section">
+<section class="testimonials-section" id="testimonials">
   <div class="testimonials-inner">
     <div class="testimonials-header reveal">
       <div>
@@ -843,50 +878,72 @@
 </section>
 
 <!-- FEATURED IN -->
-<section class="featured-section">
+<section class="featured-section" id="experience">
   <div class="section-eyebrow" style="justify-content:center; margin-bottom:8px;">Press</div>
   <p class="featured-title">As featured in</p>
   <div class="featured-list">
-    <a href="#">Adobe</a>
-    <a href="#">Beautiful Bizarre Magazine</a>
-    <a href="#">Faerie Magazine</a>
-    <a href="#">Canon Europe</a>
-    <a href="#">Instagram</a>
-    <a href="#">Digital SLR Magazine</a>
-    <a href="#">My Modern Met</a>
-    <a href="#">Vogue Italia</a>
-    <a href="#">Photo Plus Magazine</a>
-    <a href="#">Bella Grace Magazine</a>
-    <a href="#">Grazia Serbia</a>
-    <a href="#">Bored Panda</a>
-    <a href="#">Practical Photography</a>
-    <a href="#">Digital Camera World</a>
-    <a href="#">CreativeLive</a>
-    <a href="#">Photography Week</a>
+    <a href="https://www.adobe.com" target="_blank" rel="noopener">Adobe</a>
+    <a href="https://beautifulbizarre.net" target="_blank" rel="noopener">Beautiful Bizarre Magazine</a>
+    <a href="https://enchantedlivingmag.com" target="_blank" rel="noopener">Faerie Magazine</a>
+    <a href="https://www.canon-europe.com" target="_blank" rel="noopener">Canon Europe</a>
+    <a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://digitalslrphoto.raspberrypi.com" target="_blank" rel="noopener">Digital SLR Magazine</a>
+    <a href="https://mymodernmet.com" target="_blank" rel="noopener">My Modern Met</a>
+    <a href="https://www.vogue.it" target="_blank" rel="noopener">Vogue Italia</a>
+    <a href="https://www.digitalcameraworld.com" target="_blank" rel="noopener">Photo Plus Magazine</a>
+    <a href="https://stampington.com/bella-grace" target="_blank" rel="noopener">Bella Grace Magazine</a>
+    <a href="https://www.grazia.rs" target="_blank" rel="noopener">Grazia Serbia</a>
+    <a href="https://www.boredpanda.com" target="_blank" rel="noopener">Bored Panda</a>
+    <a href="https://www.digitalcameraworld.com" target="_blank" rel="noopener">Practical Photography</a>
+    <a href="https://www.digitalcameraworld.com" target="_blank" rel="noopener">Digital Camera World</a>
+    <a href="https://www.creativelive.com" target="_blank" rel="noopener">CreativeLive</a>
+    <a href="https://apps.apple.com/gb/app/photography-week-weekly-digital/id540334095" target="_blank" rel="noopener">Photography Week</a>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
+<!-- CTA / CONTACT -->
+<section class="cta-section" id="contact">
   <div class="cta-eyebrow reveal">Let's create together</div>
   <h2 class="cta-heading reveal">Ready to bring your<br><em>vision to life?</em></h2>
-  <a href="#" class="cta-btn reveal">Get in touch</a>
+  <a href="mailto:ujwaljohnsonphotography@gmail.com" class="cta-btn reveal">Get in touch</a>
+  <p class="contact-email reveal" style="margin-top:28px; font-size:0.85rem; letter-spacing:0.08em; color:var(--warm-gray);">
+    or email directly: <a href="mailto:ujwaljohnsonphotography@gmail.com" style="color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(184,156,106,0.4); padding-bottom:2px;">ujwaljohnsonphotography@gmail.com</a>
+  </p>
 </section>
 
 <!-- FOOTER -->
-<footer>
+<footer id="shop">
   <div class="footer-logo">UJPhotography</div>
   <ul class="footer-links">
-    <li><a href="#">About</a></li>
-    <li><a href="#">Portfolio</a></li>
-    <li><a href="#">Workshops</a></li>
-    <li><a href="#">Shop</a></li>
-    <li><a href="#">Contact</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('about')">About</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('portfolio')">Portfolio</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('experience')">Experience</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('contact')">Contact</a></li>
+    <li><a href="mailto:ujwaljohnsonphotography@gmail.com">Email</a></li>
   </ul>
   <div class="footer-copy">© 2024 UJPhotography. All rights reserved.</div>
 </footer>
 
 <script>
+// Smooth scroll function (works inside iframes)
+function navScrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── IMAGE LOADER ──────────────────────────────────────────────
+// For each hero slide, try loading the local image first.
+// If it fails (file not found), fall back to the demo Unsplash URL.
+// Once you place your own images in images/, the demos are replaced automatically.
+document.querySelectorAll('.hero-slide').forEach(slide => {
+  const local = slide.dataset.local;
+  const fallback = slide.dataset.fallback;
+  const tester = new Image();
+  tester.onload = () => slide.style.backgroundImage = `url('${local}')`;
+  tester.onerror = () => slide.style.backgroundImage = `url('${fallback}')`;
+  tester.src = local;
+});
+
 // Slideshow
 const slides = document.querySelectorAll('.hero-slide');
 const dotsContainer = document.getElementById('slideDots');
