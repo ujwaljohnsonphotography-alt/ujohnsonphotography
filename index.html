@@ -226,6 +226,43 @@
 
   /* ABOUT SECTION */
   .section { padding: 120px 60px; }
+ .portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.portfolio-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  text-decoration: none;
+  display: block;
+}
+
+.portfolio-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.portfolio-card:hover img {
+  transform: scale(1.08);
+}
+
+.portfolio-title {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  padding: 20px;
+  background: rgba(0,0,0,0.45);
+  color: #f4f0ea;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+}
 
   .about-grid {
     display: grid;
@@ -790,26 +827,36 @@
 </div>
 
 <!-- CLIENTS -->
-<section class="clients-section" id="portfolio">
-  <div class="clients-heading">PORTFOLIO </div>
-  <div class="clients-marquee">
-    <div class="clients-track" id="marqueeTrack">
-      <span class="client-name">PORTRAITURE</span>
-      <span class="client-name">LANDSCAPE</span>
-      <span class="client-name">WEDDING</span>
-      <span class="client-name">STREET</span>
-      <span class="client-name">AUTOMOTIVE</span>
-      <span class="client-name">REAL ESTATE</span>
+<!-- PORTFOLIO GRID -->
+<section class="section" id="portfolio-grid">
+  <div class="section-eyebrow">Portfolio</div>
+  <h2 class="about-heading">Browse <em>My Work</em></h2>
 
-      <!-- duplicates for seamless loop -->
-      <span class="client-name">PORTRAITURE</span>
-      <span class="client-name">LANDSCAPE</span>
-      <span class="client-name">WEDDING</span>
-      <span class="client-name">STREET</span>
-      <span class="client-name">AUTOMOTIVE</span>
-      <span class="client-name">REAL ESTATE</span>
+  <div class="portfolio-grid">
+    <a class="portfolio-card" href="portfolio/portraiture.html">
+      <img src="images/portfolio/portraiture/thumb.jpg" alt="Portraiture">
+      <div class="portfolio-title">Portraiture</div>
+    </a>
 
-    </div>
+    <a class="portfolio-card" href="portfolio/landscape.html">
+      <img src="images/portfolio/landscape/thumb.jpg" alt="Landscape">
+      <div class="portfolio-title">Landscape</div>
+    </a>
+
+    <a class="portfolio-card" hreff="portfolio/street.html">
+      <img src="images/portfolio/street/thumb.jpg" alt="Street Photography">
+      <div class="portfolio-title">Street</div>
+    </a>
+
+    <a class="portfolio-card" href="portfolio/automotive.html">
+      <img src="images/portfolio/automotive/thumb.jpg" alt="Automotive">
+      <div class="portfolio-title">Automotive</div>
+    </a>
+
+    <a class="portfolio-card" href="portfolio/realestate.html">
+      <img src="images/portfolio/realestate/thumb.jpg" alt="Real Estate">
+      <div class="portfolio-title">Real Estate</div>
+    </a>
   </div>
 </section>
 
