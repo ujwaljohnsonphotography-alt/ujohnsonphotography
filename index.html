@@ -722,6 +722,127 @@
     footer { flex-direction: column; gap: 32px; text-align: center; }
     .footer-links { flex-wrap: wrap; justify-content: center; }
   }
+  .portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.portfolio-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  text-decoration: none;
+  display: block;
+}
+
+.portfolio-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.portfolio-card:hover img {
+  transform: scale(1.08);
+}
+
+.portfolio-title {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  padding: 20px;
+  background: rgba(0,0,0,0.45);
+  color: #f4f0ea;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+}
+/* DROPDOWN — NAV */
+.nav-links li { position: relative; }
+
+.has-dropdown > .dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.has-dropdown > .dropdown-toggle::after {
+  content: '▾';
+  font-size: 0.7rem;
+  transform: translateY(-1px);
+  opacity: 0.7;
+}
+
+/* Submenu base */
+.submenu {
+  position: absolute;
+  top: 140%;
+  left: -8px;
+  min-width: 220px;
+  background: rgba(250,248,245,0.98); /* off-white, translucent */
+  border: 1px solid rgba(184,156,106,0.25); /* gold tone */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 10px 0;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 200;
+  backdrop-filter: blur(6px);
+}
+
+/* Submenu arrow */
+.submenu::before {
+  content: '';
+  position: absolute;
+  top: -8px; left: 24px;
+  width: 12px; height: 12px;
+  background: inherit;
+  border-left: 1px solid rgba(184,156,106,0.25);
+  border-top: 1px solid rgba(184,156,106,0.25);
+  transform: rotate(45deg);
+}
+
+/* Show on hover/focus */
+.has-dropdown:hover > .submenu,
+.has-dropdown:focus-within > .submenu,
+.has-dropdown.open > .submenu {   /* .open is toggled by JS on touch */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Submenu items */
+.submenu a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink); /* dark text on light submenu */
+  transition: background 0.2s, color 0.2s, padding-left 0.2s;
+  white-space: nowrap;
+}
+.submenu a:hover {
+  background: rgba(184,156,106,0.08);
+  color: var(--gold);
+  padding-left: 20px;
+}
+
+/* Keep colors consistent when nav is transparent vs scrolled */
+nav:not(.scrolled) .has-dropdown > .dropdown-toggle { color: rgba(250,248,245,0.85); }
+nav.scrolled .has-dropdown > .dropdown-toggle { color: var(--warm-gray); }
+
+/* Adjust dropdown toggle arrow color with nav state */
+nav:not(.scrolled) .has-dropdown > .dropdown-toggle::after { color: rgba(250,248,245,0.85); }
+nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); }
+
+/* Mobile note: .nav-links are hidden in your CSS under 768px.
+   If you later add a burger menu, the submenu styles will still work. */
 </style>
 </head>
 <body>
@@ -731,7 +852,19 @@
   <a href="javascript:void(0)" onclick="navScrollTo('hero')" class="nav-logo">UJPhotography</a>
   <ul class="nav-links">
     <li><a href="javascript:void(0)" onclick="navScrollTo('about')">About</a></li>
-    <li><a href="javascript:void(0)" onclick="navScrollTo('portfolio')">Portfolio</a></li>
+    <li class="has-dropdown">
+  <a href="javascript:void(0)" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+    Portfolio
+  </a>
+  <ul class="submenu" role="menu" aria-label="Portfolio submenu">
+    <li role="none"><a role="menuitem" href="portfolio/portraiture.html">Portraiture</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/landscape.html">Landscape</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/wedding.html">Wedding</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/street.html">Street</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/automotive.html">Automotive</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/realestate.html">Real Estate</a></li>
+  </ul>
+</li>
     <li><a href="javascript:void(0)" onclick="navScrollTo('contact')">Contact</a></li>
   </ul>
 </nav>
@@ -758,8 +891,6 @@
     <div class="hero-slide" style="background-image: url('images/hero3.jpg')"></div>
     <div class="hero-slide" style="background-image: url('images/hero4.jpg')"></div>
     <div class="hero-slide" style="background-image: url('images/hero5.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero6.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero7.jpg')"></div>
   </div>
 
   <div class="hero-bg"></div>
