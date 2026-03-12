@@ -7,8 +7,8 @@
     content="width=device-width, initial-scale=1.0"
   />
   <title>UJPhotography — Portraiture</title>
-  <meta name="description" content="Portraiture gallery by UJPhotography — large-format, auto-playing slideshow." />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <meta name="description" content="Portraiture gallery by UJPhotography — large-format, auto-playing slideshow with curated notes." />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
 
   <style>
     /* ===== Base + Palette (matches your site) ===== */
@@ -29,132 +29,245 @@
       background:var(--ink);
       overflow-x:hidden;
     }
+    a{ text-decoration:none }
+
+    /* ===== Header (simple, elegant) ===== */
+    .header{
+      position:fixed; top:0; left:0; right:0; z-index:20;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 22px;
+      background:linear-gradient(to bottom, rgba(26,23,20,0.85), rgba(26,23,20,0.15));
+      transition:background .25s ease, backdrop-filter .25s ease;
+    }
+    .header.scrolled{
+      background:rgba(26,23,20,.85);
+      backdrop-filter:blur(6px);
+    }
+    .brand{
+      color:var(--cream);
+      letter-spacing:.18em;
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.1rem;
+    }
+    .brand span{ color:var(--light-gold) }
+    .nav-links{
+      display:flex; gap:14px; flex-wrap:wrap; align-items:center;
+    }
+    .nav-links a{
+      color:rgba(250,248,245,0.85);
+      font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+      padding:6px 8px; border-bottom:1px solid transparent;
+      transition:color .2s, border-color .2s;
+    }
+    .nav-links a:hover{ color:var(--gold) }
+    .nav-links a.active{
+      color:var(--gold);
+      border-color:rgba(184,156,106,0.55);
+    }
+    .home-link{
+      color:var(--cream); margin-right:10px; padding:6px 10px;
+      border:1px solid rgba(255,255,255,0.18); border-radius:2px;
+      font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+      transition:background .2s, color .2s, border-color .2s;
+    }
+    .home-link:hover{
+      background:rgba(184,156,106,.14);
+      color:var(--light-gold);
+      border-color:rgba(184,156,106,.45);
+    }
 
     /* ===== Fullscreen slideshow ===== */
     .hero{
-      position:relative;
-      height:100vh;
-      overflow:hidden;
-      background:var(--ink);
+      position:relative; height:100vh; overflow:hidden; background:var(--ink);
     }
     .hero-slideshow{
-      position:absolute;
-      inset:0;
-      z-index:0;
+      position:absolute; inset:0; z-index:0;
     }
     .hero-slide{
-      position:absolute;
-      inset:0;
-      background-size:cover;
-      background-position:center;
-      opacity:0;
-      transform:scale(1.05);                       /* subtle parallax zoom */
+      position:absolute; inset:0;
+      background-size:cover; background-position:center;
+      opacity:0; transform:scale(1.05);
       transition:opacity 1.6s ease-in-out, transform 6s ease-out;
     }
-    .hero-slide.active{
-      opacity:1;
-      transform:scale(1);
-    }
+    .hero-slide.active{ opacity:1; transform:scale(1) }
 
-    /* Soft gradient so dots are always readable */
+    /* Soft gradient so UI is readable */
     .hero-bg{
-      position:absolute;
-      inset:0;
+      position:absolute; inset:0; z-index:1; pointer-events:none;
       background:
         linear-gradient(160deg, transparent 40%, rgba(26,23,20,0.65) 100%),
         linear-gradient(to bottom, rgba(26,23,20,0.15) 0%, transparent 30%, rgba(26,23,20,0.85) 100%);
-      z-index:1;
-      pointer-events:none;
     }
 
-    /* Dots (left-bottom, like homepage) */
+    /* Dots */
     .slide-dots{
-      position:absolute;
-      left:32px;
-      bottom:36px;
-      display:flex;
-      gap:10px;
-      z-index:2;
+      position:absolute; left:28px; bottom:34px; display:flex; gap:10px; z-index:2;
     }
     .slide-dot{
-      width:22px;
-      height:2px;
-      background:rgba(244,240,234,0.35);
-      cursor:pointer;
-      transition:width .3s, background .3s, transform .2s;
+      width:22px; height:2px; background:rgba(244,240,234,0.35);
+      cursor:pointer; transition:width .3s, background .3s, transform .2s;
     }
     .slide-dot:hover{ transform:scaleX(1.1) }
-    .slide-dot.active{
-      width:42px;
-      background:var(--gold);
-    }
+    .slide-dot.active{ width:42px; background:var(--gold) }
 
-    /* Optional tiny overlay title (can remove if you want a pure slideshow) */
-    .page-badge{
-      position:absolute;
-      top:26px;
-      left:26px;
-      z-index:2;
-      font-size:.65rem;
-      letter-spacing:.35em;
-      text-transform:uppercase;
-      color:var(--light-gold);
-      padding:8px 12px;
-      background:rgba(0,0,0,0.28);
-      border:1px solid rgba(184,156,106,0.35);
-      backdrop-filter:blur(4px);
+    /* ===== Series write-up ===== */
+    .series-copy{
+      background:var(--off-white); color:var(--ink);
+      padding:72px 24px; display:grid; place-items:center;
     }
+    .series-inner{
+      width:min(1100px, 92vw);
+    }
+    .eyebrow{
+      font-size:.62rem; letter-spacing:.42em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:16px;
+    }
+    .series-title{
+      font-family:'Cormorant Garamond', serif;
+      font-weight:300; line-height:1.15;
+      font-size:clamp(2.2rem, 5vw, 3.8rem);
+      margin:0 0 18px;
+    }
+    .series-sub{
+      color:#6b655e; font-size:1rem; letter-spacing:.03em; line-height:1.85;
+      margin:0 0 28px; max-width:740px;
+    }
+    .series-grid{
+      display:grid; gap:22px; grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+      margin-top:12px;
+    }
+    .note{
+      background:#fff; border:1px solid rgba(0,0,0,0.06);
+      padding:18px 18px 16px;
+    }
+    .note h3{
+      font-family:'Cormorant Garamond', serif; font-weight:300; margin:0 0 8px; font-size:1.2rem;
+      color:#2a2724;
+    }
+    .note p{ margin:0; color:#4a443e; line-height:1.7; font-size:.98rem }
 
-    /* Mobile adjustments */
+    .cta-row{
+      display:flex; gap:14px; flex-wrap:wrap; margin-top:28px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:14px 18px; border:1px solid var(--ink); color:var(--ink);
+      text-transform:uppercase; letter-spacing:.22em; font-size:.72rem;
+      transition:background .2s, color .2s, border-color .2s;
+    }
+    .btn:hover{ background:var(--ink); color:var(--cream); border-color:var(--ink) }
+
+    /* Mobile tweaks */
     @media (max-width:768px){
-      .slide-dots{ left:20px; bottom:24px }
-      .page-badge{ top:18px; left:18px; letter-spacing:.28em }
+      .nav-links{ gap:10px }
+      .slide-dots{ left:20px; bottom:22px }
+      .home-link{ display:none } /* keep it clean on small screens; Home stays inside links below */
     }
   </style>
 </head>
 <body>
 
-  <!-- ===== Portraiture Slideshow ONLY ===== -->
-  <section class="hero" aria-label="Portraiture slideshow">
-    <div class="hero-slideshow" id="heroSlideshow">
-      <!-- Replace these with your actual images -->
-      <div class="hero-slide active" style="background-image:url('../images/portfolio/portraiture/slide1.jpg');"></div>
-      <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide2.jpg');"></div>
-      <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide3.jpg');"></div>
-      <!-- Add more slides if you want
-      <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide4.jpg');"></div>
-      <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide5.jpg');"></div>
-      -->
-    </div>
+  <!-- ===== Top bar: Home + Portfolio links ===== -->
+  <header class="header" id="siteHeader" role="navigation" aria-label="Portfolio navigation">
+    <a class="home-link" href="../index.html" aria-label="Back to Home">← Home</a>
+    <a class="brand" href="../index.html" aria-label="UJPhotography Home">UJ<span>Photography</span></a>
+    <nav class="nav-links" aria-label="Portfolio sections">
+      <a href="./portraiture.html" aria-current="page" class="active">Portraiture</a>
+      <a href="./landscape.html">Landscape</a>
+      <a href="./wedding.html">Wedding</a>
+      <a href="./street.html">Street</a>
+      <a href="./automotive.html">Automotive</a>
+      <a href="./realestate.html">Real&nbsp;Estate</a>
+    </nav>
+  </header>
 
-    <div class="hero-bg" aria-hidden="true"></div>
+  <!-- ===== Fullscreen Slideshow ===== -->
+  <main>
+    <section class="hero" aria-label="Portraiture slideshow">
+      <div class="hero-slideshow" id="heroSlideshow">
+        <!-- Replace these with your actual images -->
+        <div class="hero-slide active" style="background-image:url('../images/portfolio/portraiture/slide1.jpg');"></div>
+        <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide2.jpg');"></div>
+        <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide3.jpg');"></div>
+        <!-- Add more if needed
+        <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide4.jpg');"></div>
+        -->
+      </div>
 
-    <!-- Small page badge (optional) -->
-    <div class="page-badge">Portraiture</div>
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="slide-dots" id="slideDots" aria-label="Slideshow navigation"></div>
+    </section>
 
-    <!-- Dots -->
-    <div class="slide-dots" id="slideDots" aria-label="Slideshow navigation"></div>
-  </section>
+    <!-- ===== Series Write-up ===== -->
+    <section class="series-copy" aria-labelledby="seriesTitle">
+      <div class="series-inner">
+        <div class="eyebrow">Portfolio — People</div>
+        <h1 id="seriesTitle" class="series-title">Portraiture</h1>
+        <p class="series-sub">
+          Faces carry entire worlds. In this ongoing portrait series, I look for the quiet seconds
+          between poses—the breath before a smile, the softness after a laugh—where a person’s
+          story speaks in light. Each frame is built with simple direction, natural gestures,
+          and a palette that keeps the attention where it belongs: on the human presence.
+        </p>
+
+        <div class="series-grid">
+          <div class="note">
+            <h3>Approach</h3>
+            <p>
+              Minimal setups, intentional light, and gentle prompts. I balance environment and
+              expression to keep the photograph honest and cinematic at once.
+            </p>
+          </div>
+          <div class="note">
+            <h3>Mood</h3>
+            <p>
+              Warm, textured, and calm. I favor skin‑true tones and soft falloff to let eyes
+              and micro‑expressions carry the frame.
+            </p>
+          </div>
+          <div class="note">
+            <h3>For Clients</h3>
+            <p>
+              Portrait sessions are available for artists, brands, and private commissions.
+              On‑location or studio options, with guidance throughout.
+            </p>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn" href="mailto:ujwaljohnsonphotography@gmail.com">Book a Session →</a>
+          <a class="btn" href="../index.html#portfolio">Back to Portfolio →</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    // Minimal, reliable slider logic (auto + dots + keyboard + (optional) pause on hover)
+    // ===== Header background on scroll
+    const headerEl = document.getElementById('siteHeader');
+    const onScroll = () => headerEl.classList.toggle('scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ===== Minimal, reliable slider logic (auto + dots + keyboard + pause on hover)
     (function () {
       const slides = Array.from(document.querySelectorAll('.hero-slide'));
       const dotsContainer = document.getElementById('slideDots');
+      const hero = document.querySelector('.hero');
 
       if (!slides.length) return;
 
       let current = 0;
       let timerId = null;
-      const INTERVAL = 5000; // 5 seconds
+      const INTERVAL = 5000; // 5s
 
-      // Create dots
+      // Dots
       slides.forEach((_, i) => {
         const dot = document.createElement('button');
         dot.type = 'button';
         dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
         dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-        dot.addEventListener('click', () => goTo(i));
+        dot.addEventListener('click', () => { goTo(i); restart(); });
         dotsContainer.appendChild(dot);
       });
 
@@ -162,42 +275,45 @@
         if (index === current) return;
         slides[current].classList.remove('active');
         dotsContainer.children[current].classList.remove('active');
-
         current = (index + slides.length) % slides.length;
-
         slides[current].classList.add('active');
         dotsContainer.children[current].classList.add('active');
       }
-
       function next() { goTo(current + 1); }
       function prev() { goTo(current - 1); }
-
-      function start() {
-        stop();
-        timerId = setInterval(next, INTERVAL);
-      }
-      function stop() {
-        if (timerId) clearInterval(timerId);
-        timerId = null;
-      }
+      function start(){ stop(); timerId = setInterval(next, INTERVAL); }
+      function stop(){ if (timerId) clearInterval(timerId); timerId = null; }
+      function restart(){ start(); }
 
       // Auto-play
       start();
 
-      // Pause on hover (optional — comment these 2 lines if not desired)
-      const hero = document.querySelector('.hero');
+      // Pause on hover (desktop)
       hero.addEventListener('mouseenter', stop);
       hero.addEventListener('mouseleave', start);
 
-      // Pause when tab not visible (saves CPU/battery)
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) stop(); else start();
-      });
+      // Pause when tab hidden
+      document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
 
-      // Keyboard navigation (←/→)
+      // Keyboard navigation
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') { next(); start(); }
-        if (e.key === 'ArrowLeft')  { prev(); start(); }
+        if (e.key === 'ArrowRight') { next(); restart(); }
+        if (e.key === 'ArrowLeft')  { prev(); restart(); }
       }, { passive: true });
 
-      // Basic swipe support for mobile
+      // Touch swipe
+      let x0 = null;
+      hero.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+      hero.addEventListener('touchend', (e) => {
+        if (x0 === null) return;
+        const dx = e.changedTouches[0].clientX - x0;
+        const T = 40; // px
+        if (dx >  T) { prev(); restart(); }
+        if (dx < -T) { next(); restart(); }
+        x0 = null;
+      }, { passive: true });
+    })();
+  </script>
+
+</body>
+</html>
