@@ -8,10 +8,10 @@
   />
   <title>UJPhotography — Portraiture</title>
   <meta name="description" content="Portraiture gallery by UJPhotography — large-format, auto-playing slideshow with curated notes." />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" />
 
   <style>
-    /* ===== Base + Palette (matches your site) ===== */
+    /* ===== Base + Palette ===== */
     :root{
       --cream:#f4f0ea;
       --ink:#1a1714;
@@ -77,6 +77,8 @@
     }
 
     /* ===== Fullscreen slideshow ===== */
+    main { margin-top:56px; } /* header offset */
+
     .hero{
       position:relative; height:100vh; overflow:hidden; background:var(--ink);
     }
@@ -91,6 +93,17 @@
     }
     .hero-slide.active{ opacity:1; transform:scale(1) }
 
+    /* Caption "slide1", "slide2", ... */
+    .hero-caption{
+      position:absolute; bottom:18px; right:20px; z-index:3;
+      font-size:.7rem; letter-spacing:.22em; text-transform:uppercase;
+      color:rgba(244,240,234,.85);
+      background:rgba(0,0,0,0.28);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:6px 10px;
+      backdrop-filter:blur(4px);
+    }
+
     /* Soft gradient so UI is readable */
     .hero-bg{
       position:absolute; inset:0; z-index:1; pointer-events:none;
@@ -101,7 +114,7 @@
 
     /* Dots */
     .slide-dots{
-      position:absolute; left:28px; bottom:34px; display:flex; gap:10px; z-index:2;
+      position:absolute; left:28px; bottom:34px; display:flex; gap:10px; z-index:3;
     }
     .slide-dot{
       width:22px; height:2px; background:rgba(244,240,234,0.35);
@@ -110,14 +123,40 @@
     .slide-dot:hover{ transform:scaleX(1.1) }
     .slide-dot.active{ width:42px; background:var(--gold) }
 
+    /* ===== Arrow buttons (overlay on images) ===== */
+    .hero-arrow{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:3; /* above slides & gradient */
+      display:inline-flex; align-items:center; justify-content:center;
+      width:44px; height:44px;
+      color:var(--cream);
+      background:rgba(0,0,0,0.28);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:50%;
+      cursor:pointer;
+      transition:background .2s, color .2s, border-color .2s, transform .15s;
+      backdrop-filter: blur(4px);
+    }
+    .hero-arrow:hover{
+      background:rgba(184,156,106,0.22);
+      color:var(--light-gold);
+      border-color:rgba(184,156,106,0.45);
+    }
+    .hero-arrow:active{ transform:translateY(-50%) scale(0.98) }
+    .hero-arrow.prev{ left:18px; }
+    .hero-arrow.next{ right:18px; }
+    @media (max-width: 480px){
+      .hero-arrow{ width:38px; height:38px }
+    }
+
     /* ===== Series write-up ===== */
     .series-copy{
       background:var(--off-white); color:var(--ink);
       padding:72px 24px; display:grid; place-items:center;
     }
-    .series-inner{
-      width:min(1100px, 92vw);
-    }
+    .series-inner{ width:min(1100px, 92vw); }
     .eyebrow{
       font-size:.62rem; letter-spacing:.42em; text-transform:uppercase;
       color:var(--gold); margin-bottom:16px;
@@ -169,10 +208,10 @@
 
   <!-- ===== Top bar: Home + Portfolio links ===== -->
   <header class="header" id="siteHeader" role="navigation" aria-label="Portfolio navigation">
-    <a class="home-link" href="../index.html" aria-label="Back to Home">← Home</a>
-    <a class="brand" href="../index.html" aria-label="UJPhotography Home">UJ<span>Photography</span></a>
+    <a class="home-link" href="../index.html">← Home</a>
+    <a class="brand" href="../index.html">UJ<span>Photography</span></a>
     <nav class="nav-links" aria-label="Portfolio sections">
-      <a href="./portraiture.html" aria-current="page" class="active">Portraiture</a>
+      <a class="active" href="./portraiture.html">Portraiture</a>
       <a href="./landscape.html">Landscape</a>
       <a href="./wedding.html">Wedding</a>
       <a href="./street.html">Street</a>
@@ -184,16 +223,22 @@
   <!-- ===== Fullscreen Slideshow ===== -->
   <main>
     <section class="hero" aria-label="Portraiture slideshow">
-      <div class="hero-slideshow" id="heroSlideshow">
-        <!-- Replace these with your actual images -->
-        <div class="hero-slide active" style="background-image:url('../images/portfolio/portraiture/slide1.jpg');"></div>
-        <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide2.jpg');"></div>
-        <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide3.jpg');"></div>
-        <!-- Add more if needed
-        <div class="hero-slide"        style="background-image:url('../images/portfolio/portraiture/slide4.jpg');"></div>
-        -->
-      </div>
+      <div class="hero-slideshow" id="heroSlideshow"></div>
 
+      <!-- Arrows (overlay on images) -->
+      <button class="hero-arrow prev" id="prevArrow" aria-label="Previous slide">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
+      </button>
+      <button class="hero-arrow next" id="nextArrow" aria-label="Next slide">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+        </svg>
+      </button>
+
+      <!-- Caption + dots + gradient -->
+      <div class="hero-caption" id="heroCaption" aria-live="polite">slide1</div>
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="slide-dots" id="slideDots" aria-label="Slideshow navigation"></div>
     </section>
@@ -236,7 +281,7 @@
 
         <div class="cta-row">
           <a class="btn" href="mailto:ujwaljohnsonphotography@gmail.com">Book a Session →</a>
-          <a class="btn" href="../index.html#portfolio">Back to Portfolio →</a>
+          <a class="btn" href="../index.html#portfolio">Back to HOME →</a>
         </div>
       </div>
     </section>
@@ -249,69 +294,156 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // ===== Minimal, reliable slider logic (auto + dots + keyboard + pause on hover)
+    // ===== Sequential image discovery & slider =====
     (function () {
-      const slides = Array.from(document.querySelectorAll('.hero-slide'));
-      const dotsContainer = document.getElementById('slideDots');
+      // ---- Configure your folder and naming here ----
+      const IMAGE_DIR   = '../images/portfolio/portraiture/'; // trailing slash required
+      const BASENAME    = 'slide';                             // slide1, slide2, ...
+      const EXTENSIONS  = ['jpg','jpeg','png','webp'];         // try in this order
+      const MAX_IMAGES  = 50;                                  // hard cap to avoid infinite loops
+      const STOP_AT_GAP = true;                                // stop when first missing index
+      const INTERVAL    = 5000;                                // 5 seconds
+
       const hero = document.querySelector('.hero');
+      const stage = document.getElementById('heroSlideshow');
+      const dotsContainer = document.getElementById('slideDots');
+      const caption = document.getElementById('heroCaption');
+      const prevBtn = document.getElementById('prevArrow');
+      const nextBtn = document.getElementById('nextArrow');
 
-      if (!slides.length) return;
-
+      let slides = [];
       let current = 0;
       let timerId = null;
-      const INTERVAL = 5000; // 5s
 
-      // Dots
-      slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-        dot.addEventListener('click', () => { goTo(i); restart(); });
-        dotsContainer.appendChild(dot);
-      });
+      // Try to resolve slideN with available extensions; return URL or null
+      function resolveImageUrl(index){
+        return new Promise((resolve) => {
+          let resolved = null;
+          let remaining = EXTENSIONS.length;
 
-      function goTo(index) {
-        if (index === current) return;
+          EXTENSIONS.forEach((ext) => {
+            const url = `${IMAGE_DIR}${BASENAME}${index}.${ext}`;
+            const img = new Image();
+            img.onload  = () => { if(!resolved){ resolved = url; resolve(url);} };
+            img.onerror = () => { if(--remaining === 0 && !resolved) resolve(null); };
+            // add a small cache buster so 404s aren't cached forever
+            img.src = url + `?v=${index}`;
+          });
+        });
+      }
+
+      async function loadSequential(){
+        for(let i=1; i<=MAX_IMAGES; i++){
+          const url = await resolveImageUrl(i);
+          if(url){
+            const slide = document.createElement('div');
+            slide.className = 'hero-slide' + (slides.length === 0 ? ' active' : '');
+            slide.style.backgroundImage = `url('${url}')`;
+            slide.setAttribute('role','img');
+            slide.setAttribute('aria-label', `${BASENAME}${i}`);
+            stage.appendChild(slide);
+            slides.push(slide);
+
+            // dot
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'slide-dot' + (slides.length === 1 ? ' active' : '');
+            dot.setAttribute('aria-label', `Go to ${BASENAME}${i}`);
+            dot.addEventListener('click', () => { goTo(slides.length-1); restart(); });
+            dotsContainer.appendChild(dot);
+          }else if(STOP_AT_GAP){
+            break; // stop at first gap
+          }
+        }
+      }
+
+      function updateCaption(){
+        caption.textContent = `${BASENAME}${current+1}`;
+      }
+
+      function goTo(index){
+        if (!slides.length) return;
         slides[current].classList.remove('active');
-        dotsContainer.children[current].classList.remove('active');
+        dotsContainer.children[current]?.classList.remove('active');
         current = (index + slides.length) % slides.length;
         slides[current].classList.add('active');
-        dotsContainer.children[current].classList.add('active');
+        dotsContainer.children[current]?.classList.add('active');
+        updateCaption();
       }
-      function next() { goTo(current + 1); }
-      function prev() { goTo(current - 1); }
-      function start(){ stop(); timerId = setInterval(next, INTERVAL); }
+      function next(){ goTo(current + 1); }
+      function prev(){ goTo(current - 1); }
+
+      function start(){ stop(); if(slides.length > 1){ timerId = setInterval(next, INTERVAL); } }
       function stop(){ if (timerId) clearInterval(timerId); timerId = null; }
       function restart(){ start(); }
 
-      // Auto-play
-      start();
+      function wireControls(){
+        // Auto-play
+        start();
 
-      // Pause on hover (desktop)
-      hero.addEventListener('mouseenter', stop);
-      hero.addEventListener('mouseleave', start);
+        // Pause on hover (desktop)
+        hero.addEventListener('mouseenter', stop);
+        hero.addEventListener('mouseleave', start);
 
-      // Pause when tab hidden
-      document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
+        // Pause when tab hidden
+        document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
 
-      // Keyboard navigation
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') { next(); restart(); }
-        if (e.key === 'ArrowLeft')  { prev(); restart(); }
-      }, { passive: true });
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') { next(); restart(); }
+          if (e.key === 'ArrowLeft')  { prev(); restart(); }
+        }, { passive: true });
 
-      // Touch swipe
-      let x0 = null;
-      hero.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-      hero.addEventListener('touchend', (e) => {
-        if (x0 === null) return;
-        const dx = e.changedTouches[0].clientX - x0;
-        const T = 40; // px
-        if (dx >  T) { prev(); restart(); }
-        if (dx < -T) { next(); restart(); }
-        x0 = null;
-      }, { passive: true });
+        // Touch swipe
+        let x0 = null;
+        hero.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+        hero.addEventListener('touchend', (e) => {
+          if (x0 === null) return;
+          const dx = e.changedTouches[0].clientX - x0;
+          const T = 40; // px
+          if (dx >  T) { prev(); restart(); }
+          if (dx < -T) { next(); restart(); }
+          x0 = null;
+        }, { passive: true });
+
+        // Buttons (the arrow buttons over the images)
+        prevBtn?.addEventListener('click', () => { prev(); restart(); });
+        nextBtn?.addEventListener('click', () => { next(); restart(); });
+      }
+
+      (async function init(){
+        await loadSequential();
+
+        if (!slides.length){
+          // Fallback if no slides found
+          const msg = document.createElement('div');
+          msg.style.position='absolute';
+          msg.style.inset='0';
+          msg.style.display='grid';
+          msg.style.placeItems='center';
+          msg.style.color='rgba(244,240,234,.85)';
+          msg.style.letterSpacing='.15em';
+          msg.style.textTransform='uppercase';
+          msg.style.background='linear-gradient(160deg, transparent 40%, rgba(26,23,20,0.65) 100%)';
+          msg.textContent = 'No slides found in images/portfolio/portraiture/';
+          stage.appendChild(msg);
+          caption.style.display = 'none';
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+          return;
+        }
+
+        // First caption
+        updateCaption();
+
+        // Hide arrows if only one image
+        if (slides.length < 2){
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+        }
+
+        wireControls();
+      })();
     })();
   </script>
 
