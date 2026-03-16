@@ -1,253 +1,269 @@
-
-<!-- @format -->
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wedding — UJPhotography</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --cream: #f4f0ea;
-        --ink: #1a1714;
-        --warm-gray: #8a847c;
-        --gold: #b89c6a;
-        --off-white: #faf8f5;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        background: var(--off-white);
-        color: var(--ink);
-        font-family: "Jost", sans-serif;
-      }
-      .wrap {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 28px 24px 60px;
-      }
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-      }
-      .brand {
-        font-family: "Cormorant Garamond", serif;
-        letter-spacing: 0.15em;
-        font-size: 1.2rem;
-        color: var(--ink);
-        text-decoration: none;
-      }
-      .back {
-        font-size: 0.7rem;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: var(--warm-gray);
-        text-decoration: none;
-        border-bottom: 1px solid rgba(184, 156, 106, 0.35);
-        padding-bottom: 4px;
-      }
-      .back:hover {
-        color: var(--gold);
-      }
-      .section-eyebrow {
-        font-size: 0.6rem;
-        letter-spacing: 0.4em;
-        text-transform: uppercase;
-        color: var(--gold);
-        margin: 8px 0 12px;
-      }
-      h1 {
-        font-family: "Cormorant Garamond", serif;
-        font-weight: 300;
-        font-size: clamp(2.2rem, 5vw, 3.4rem);
-        margin: 0 0 8px;
-      }
-      .subtitle {
-        color: #4a443e;
-        letter-spacing: 0.03em;
-        margin-bottom: 24px;
-      }
-      .cats {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin: 8px 0 28px;
-      }
-      .cat {
-        display: inline-block;
-        padding: 8px 14px;
-        border: 1px solid rgba(184, 156, 106, 0.35);
-        text-decoration: none;
-        color: var(--ink);
-        font-size: 0.75rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        border-radius: 2px;
-        transition: all 0.2s;
-      }
-      .cat:hover {
-        color: var(--gold);
-        border-color: var(--gold);
-      }
-      .cat.active {
-        background: var(--ink);
-        color: var(--cream);
-        border-color: var(--ink);
-      }
-      .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 18px;
-      }
-      .card {
-        position: relative;
-        overflow: hidden;
-        background: #141012;
-        border-radius: 4px;
-      }
-      .card img {
-        width: 100%;
-        height: 320px;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.6s ease;
-      }
-      .card:hover img {
-        transform: scale(1.06);
-      }
-      .cap {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 10px 12px;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.45), transparent);
-        color: #eee;
-        font-family: "Cormorant Garamond", serif;
-        letter-spacing: 0.06em;
-      }
-      footer {
-        margin-top: 40px;
-        font-size: 0.7rem;
-        letter-spacing: 0.15em;
-        color: rgba(138, 132, 124, 0.7);
-        text-align: center;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <div class="topbar">
-        <a class="brand" href="../index.html">UJPhotography</a>
-        <a class="back" href="../index.html#portfolio">← Back to Home</a>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-      <div class="section-eyebrow">Portfolio</div>
-      <h1>Wedding</h1>
-      <div class="subtitle">
-        Love stories told with elegance, emotion, and timeless detail.
-      </div>
+  <title>UJPhotography — Wedding</title>
+  <meta name="description" content="Wedding photography by UJPhotography — emotional moments, candid frames, elegant storytelling." />
 
-      <nav class="cats">
-        <a class="cat" href="portraiture.html">Portraiture</a>
-        <a class="cat" href="landscape.html">Landscape</a>
-        <a class="cat active" href="wedding.html">Wedding</a>
-        <a class="cat" href="street.html">Street</a>
-        <a class="cat" href="automotive.html">Automotive</a>
-        <a class="cat" href="realestate.html">Real Estate</a>
-      </nav>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 
-      <div class="gallery">
-        <div class="card">
-          <img
-            src="../images/portfolio/wedding/1.jpg"
-            data-fallback="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1400&q=80"
-            alt="Wedding 1"
-            onerror="
-              if (this.src !== this.dataset.fallback) {
-                this.src = this.dataset.fallback;
-              }
-            "
-          />
-          <div class="cap">First Look</div>
-        </div>
-        <div class="card">
-          <img
-            src="../images/portfolio/wedding/2.jpg"
-            data-fallback="https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=1400&q=80"
-            alt="Wedding 2"
-            onerror="
-              if (this.src !== this.dataset.fallback) {
-                this.src = this.dataset.fallback;
-              }
-            "
-          />
-          <div class="cap">Ceremony</div>
-        </div>
-        <div class="card">
-          <img
-            src="../images/portfolio/wedding/3.jpg"
-            data-fallback="https://images.unsplash.com/photo-1529634898991-eda5bdb0a1be?w=1400&q=80"
-            alt="Wedding 3"
-            onerror="
-              if (this.src !== this.dataset.fallback) {
-                this.src = this.dataset.fallback;
-              }
-            "
-          />
-          <div class="cap">Vows</div>
-        </div>
-        <div class="card">
-          <img
-            src="../images/portfolio/wedding/4.jpg"
-            data-fallback="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1400&q=80"
-            alt="Wedding 4"
-            onerror="
-              if (this.src !== this.dataset.fallback) {
-                this.src = this.dataset.fallback;
-              }
-            "
-          />
-          <div class="cap">Bridal Portrait</div>
-        </div>
-        <div class="card">
-          <img
-            src="../images/portfolio/wedding/5.jpg"
-            data-fallback="https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=80"
-            alt="Wedding 5"
-            onerror="
-              if (this.src !== this.dataset.fallback) {
-                this.src = this.dataset.fallback;
-              }
-            "
-          />
-          <div class="cap">Reception Details</div>
-        </div>
-        <div class="card">
-          <img
-            src="../images/portfolio/wedding/6.jpg"
-            data-fallback="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1400&q=80"
-            alt="Wedding 6"
-            onerror="
-              if (this.src !== this.dataset.fallback) {
-                this.src = this.dataset.fallback;
-              }
-            "
-          />
-          <div class="cap">The Dance</div>
-        </div>
-      </div>
+  <style>
+    /* ===== Base + Palette ===== */
+    :root{
+      --cream:#f4f0ea;
+      --ink:#1a1714;
+      --warm-gray:#8a847c;
+      --gold:#b89c6a;
+      --light-gold:#d4bc8e;
+      --off-white:#faf8f5;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Jost',sans-serif;
+      color:var(--cream);
+      background:var(--ink);
+      overflow    }
+    a{ text-decoration:none }
 
-      <footer>© 2024 UJPhotography. All rights reserved.</footer>
-    </div>
-  </body>
-</html>
+    /* ===== Header ===== */
+    .header{
+      position:fixed; top:0; left:0; right:0; z-index:20;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 22px;
+      background:linear-gradient(to bottom, rgba(26,23,20,0.85), rgba(26,23,20,0.15));
+      transition:background .25s ease, backdrop-filter .25s ease;
+    }
+    .header.scrolled{
+      background:rgba(26,23,20,.85);
+      backdrop-filter:blur(6px);
+    }
+    .brand{
+      color:var(--cream);
+      letter-spacing:.18em;
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.1rem;
+    }
+    .brand span{ color:var(--light-gold) }
+    .nav-links{
+      display:flex; gap:14px; flex-wrap:wrap; align-items:center;
+    }
+    .nav-links a{
+      color:rgba(250,248,245,0.85);
+      font-size:.72rem; letter-spacing:.22em;
+      text-transform:uppercase;
+      padding:6px 8px; border-bottom:1px solid transparent;
+      transition:color .2s, border-color .2s;
+    }
+    .nav-links a:hover{ color:var(--gold) }
+    .nav-links a.active{
+      color:var(--gold);
+      border-color:rgba(184,156,106,0.55);
+    }
+    .home-link{
+      color:var(--cream); margin-right:10px; padding:6px 10px;
+      border:1px solid rgba(255,255,255,0.18); border-radius:2px;
+      font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+    }
+    .home-link:hover{
+      background:rgba(184,156,106,.14);
+      color:var(--light-gold);
+      border-color:rgba(184,156,106,.45);
+    }
+
+    /* ===== Slideshow ===== */
+    main{ margin-top:56px; }
+
+    .hero{
+      position:relative; height:100vh;
+      overflow:hidden; background:var(--ink);
+    }
+    .hero-slideshow{
+      position:absolute; inset:0; z-index:0;
+    }
+    .hero-slide{
+      position:absolute; inset:0;
+      background-size:cover;
+      background-position:center;
+      opacity:0; transform:scale(1.05);
+      transition:opacity 1.6s ease-in-out, transform 6s ease-out;
+    }
+    .hero-slide.active{
+      opacity:1; transform:scale(1);
+    }
+
+    .hero-caption{
+      position:absolute; bottom:18px; right:20px; z-index:3;
+      font-size:.7rem; letter-spacing:.22em; text-transform:uppercase;
+      color:rgba(244,240,234,.85);
+      background:rgba(0,0,0,0.28);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:6px 10px;
+      backdrop-filter:blur(4px);
+    }
+
+    .hero-bg{
+      position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:
+        linear-gradient(160deg, transparent 40%, rgba(26,23,20,0.65) 100%),
+        linear-gradient(to bottom, rgba(26,23,20,0.15) 0%, transparent 30%, rgba(26,23,20,0.85) 100%);
+    }
+
+    .slide-dots{
+      position:absolute; left:28px; bottom:34px;
+      display:flex; gap:10px; z-index:3;
+    }
+    .slide-dot{
+      width:22px; height:2px;
+      background:rgba(244,240,234,0.35);
+      transition:.3s; cursor:pointer;
+    }
+    .slide-dot.active{ width:42px; background:var(--gold); }
+
+    .hero-arrow{
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:44px; height:44px; z-index:3;
+      display:flex; align-items:center; justify-content:center;
+      border-radius:50%;
+      background:rgba(0,0,0,0.28);
+      border:1px solid rgba(255,255,255,0.18);
+      color:var(--cream); cursor:pointer;
+      backdrop-filter:blur(4px);
+    }
+    .hero-arrow.prev{ left:18px; }
+    .hero-arrow.next{ right:18px; }
+    .hero-arrow:hover{
+      background:rgba(184,156,106,0.22);
+      color:var(--light-gold);
+      border-color:rgba(184,156,106,0.45);
+    }
+
+    @media(max-width:480px){
+      .hero-arrow{ width:38px; height:38px; }
+    }
+
+    /* ===== Write-up ===== */
+    .series-copy{
+      background:var(--off-white);
+      color:var(--ink);
+      padding:72px 24px;
+      display:grid; place-items:center;
+    }
+    .series-inner{
+      width:min(1100px,92vw);
+    }
+    .eyebrow{
+      font-size:.62rem; letter-spacing:.42em;
+      color:var(--gold); text-transform:uppercase;
+      margin-bottom:16px;
+    }
+    .series-title{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2.2rem,5vw,3.8rem);
+      font-weight:300; margin:0 0 18px;
+    }
+    .series-sub{
+      max-width:740px; color:#6b655e;
+      font-size:1rem; line-height:1.85;
+      margin:0 0 28px;
+    }
+    .series-grid{
+      display:grid; gap:22px;
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    }
+    .note{
+      background:#fff;
+      border:1px solid rgba(0,0,0,0.06);
+      padding:18px;
+    }
+    .note h3{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.2rem; font-weight:300; margin:0 0 8px;
+      color:#2a2724;
+    }
+    .note p{
+      margin:0; color:#4a443e; line-height:1.7;
+    }
+    .cta-row{
+      margin-top:28px;
+      display:flex; gap:14px; flex-wrap:wrap;
+    }
+    .btn{
+      padding:14px 18px;
+      border:1px solid var(--ink);
+      color:var(--ink);
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-size:.72rem;
+    }
+    .btn:hover{
+      background:var(--ink);
+      color:var(--cream);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header" id="siteHeader">
+    <a class="home-link" href="../index.html">← Home</a>
+    <a class="brand" href="../index.html">UJ<span>Photography</span></a>
+
+    <nav class="nav-links">
+      <a href="./portraiture.html">Portraiture</a>
+      <a href="./landscape.html">Landscape</a>
+      <a class="active" href="./wedding.html">Wedding</a>
+      <a href
+  <!-- ===== Slideshow ===== -->
+  <main>
+    <section class="hero" aria-label="Wedding slideshow">
+      <div class="hero-slideshow" id="heroSlideshow"></div>
+
+      <button class="hero-arrow prev" id="prevArrow" aria-label="Previous slide">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      <button class="hero-arrow next" id="nextArrow" aria-label="Next slide">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+      </button>
+
+      <div class="hero-caption" id="heroCaption">slide1</div>
+      <div class="hero-bg"></div>
+      <div class="slide-dots" id="slideDots"></div>
+    </section>
+
+    <!-- ===== Write-up Section ===== -->
+    <section class="series-copy">
+      <div class="series-inner">
+
+        <div class="eyebrow">Portfolio — Weddings</div>
+        <h1 class="series-title">Wedding</h1>
+
+        <p class="series-sub">
+          Weddings are about unrepeatable moments—glances, gestures, laughter, and emotion that unfolds
+          in real time. My approach blends documentary storytelling with cinematic stills, capturing the
+          day exactly as it felt.
+        </p>
+
+        <div class="series-grid">
+          <div class="note">
+            <h3>Approach</h3>
+            <p>
+              A mix of candid observation and gentle direction, ensuring images feel authentic while still
+              beautifully composed.
+            </p>
+          </div>
+
+          <div class="note">
+            <h3>Light & Emotion</h3>
+            <p>
+              Soft natural light, warm tones, and quiet framing help preserve the intimacy and atmosphere
+              of the day.
+            </p>
+          </div>
+
+          <div class="note">
+            <h3>For Couples</h3>
