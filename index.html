@@ -857,12 +857,12 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
     Portfolio
   </a>
   <ul class="submenu" role="menu" aria-label="Portfolio submenu">
-    <li role="none"><a role="menuitem" href="portfolio/portraiture.html">Portraiture</a></li>
-    <li role="none"><a role="menuitem" href="portfolio/landscape.html">Landscape</a></li>
-    <li role="none"><a role="menuitem" href="portfolio/wedding.html">Wedding</a></li>
-    <li role="none"><a role="menuitem" href="portfolio/street.html">Street</a></li>
-    <li role="none"><a role="menuitem" href="portfolio/automotive.html">Automotive</a></li>
-    <li role="none"><a role="menuitem" href="portfolio/realestate.html">Real Estate</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/gallery.html?series=portraiture">Portraiture</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/gallery.html?series=landscape">Landscape</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/gallery.html?series=wedding">Wedding</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/gallery.html?series=street">Street</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/gallery.html?series=automotive">Automotive</a></li>
+    <li role="none"><a role="menuitem" href="portfolio/gallery.html?series=localbusiness">Local Businesses</a></li>
   </ul>
 </li>
     <li><a href="javascript:void(0)" onclick="navScrollTo('contact')">Contact</a></li>
@@ -968,29 +968,39 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
   <h2 class="about-heading">Browse <em>My Work</em></h2>
 
   <div class="portfolio-grid">
-    <a class="portfolio-card" href="portfolio/portraiture.html">
-      <img src="images/portfolio/portraiture/thumb.jpg" alt="Portraiture">
+    <a class="portfolio-card" href="portfolio/gallery.html?series=portraiture">
+      <img src="portfolio/images/portraiture/thumb.jpg" alt="Portraiture">
       <div class="portfolio-title">Portraiture</div>
     </a>
 
-    <a class="portfolio-card" href="portfolio/landscape.html">
-      <img src="images/portfolio/landscape/thumb.jpg" alt="Landscape">
+    <a class="portfolio-card" href="portfolio/gallery.html?series=landscape">
+      <img src="portfolio/images/landscape/thumb.jpg" alt="Landscape">
       <div class="portfolio-title">Landscape</div>
     </a>
 
-    <a class="portfolio-card" hreff="portfolio/street.html">
-      <img src="images/portfolio/street/thumb.jpg" alt="Street Photography">
+    <a class="portfolio-card" href="portfolio/gallery.html?series=street">
+      <img src="portfolio/images/street/thumb.jpg" alt="Street Photography">
       <div class="portfolio-title">Street</div>
     </a>
 
-    <a class="portfolio-card" href="portfolio/automotive.html">
-      <img src="images/portfolio/automotive/thumb.jpg" alt="Automotive">
+    <a class="portfolio-card" href="portfolio/gallery.html?series=automotive">
+      <img src="portfolio/images/automotive/thumb.jpg" alt="Automotive">
       <div class="portfolio-title">Automotive</div>
     </a>
 
-    <a class="portfolio-card" href="portfolio/realestate.html">
-      <img src="images/portfolio/realestate/thumb.jpg" alt="Real Estate">
+    <a class="portfolio-card" href="portfolio/gallery.html?series=realestate">
+      <img src="portfolio/images/realestate/thumb.jpg" alt="Real Estate">
       <div class="portfolio-title">Real Estate</div>
+    </a>
+
+    <a class="portfolio-card" href="portfolio/gallery.html?series=wedding">
+      <img src="portfolio/images/wedding/thumb.jpg" alt="Wedding">
+      <div class="portfolio-title">Wedding</div>
+    </a>
+
+    <a class="portfolio-card" href="portfolio/gallery.html?series=localbusiness">
+      <img src="portfolio/images/localbusiness/thumb.jpg" alt="Local Business">
+      <div class="portfolio-title">Local Business</div>
     </a>
   </div>
 </section>
