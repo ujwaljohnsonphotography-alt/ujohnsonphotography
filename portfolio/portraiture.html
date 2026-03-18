@@ -1,44 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portraiture — UJPhotography</title>
-  ../styles.css
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>UJPhotography — Portraiture</title>
+  <meta name="description" content="Portraiture gallery by UJPhotography — large-format, auto-playing slideshow with curated notes." />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" />
 
   <style>
-    body { background: #faf8f5; padding: 40px; font-family: 'Jost', sans-serif; }
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 3rem;
-      margin-bottom: 30px;
-      letter-spacing: 0.05em;
+    /* ===== Base + Palette ===== */
+    :root{
+      --cream:#f4f0ea;
+      --ink:#1a1714;
+      --warm-gray:#8a847c;
+      --gold:#b89c6a;
+      --light-gold:#d4bc8e;
+      --off-white:#faf8f5;
     }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Jost',sans-serif;
+      color:var(--cream);
+      background:var(--ink);
+      overflow-x:hidden;
     }
-    .gallery img {
-      width: 100%;
-      height: 360px;
-      object-fit: cover;
-      border-radius: 6px;
+    a{ text-decoration:none }
+
+    /* ===== Header (simple, elegant) ===== */
+    .header{
+      position:fixed; top:0; left:0; right:0; z-index:20;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 22px;
+      background:linear-gradient(to bottom, rgba(26,23,20,0.85), rgba(26,23,20,0.15));
+      transition:background .25s ease, backdrop-filter .25s ease;
+    }
+    .header.scrolled{
+      background:rgba(26,23,20,.85);
+      backdrop-filter:blur(6px);
+    }
+    .brand{
+      color:var(--cream);
+      letter-spacing:.18em;
+      font-family:'Cormorant Garamond', serif;
+      font-size:1.1rem;
+    }
+    .brand span{ color:var(--light-gold) }
+    .nav-links{
+      display:flex; gap:14px; flex-wrap:wrap; align-items:center;
+    }
+    .nav-links a{
+      color:rgba(250,248,245,0.85);
+      font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+      padding:6px 8px; border-bottom:1px solid transparent;
+      transition:color .2s, border-color .2s;
+    }
+    .nav-links a:hover{ color:var(--gold) }
+    .nav-links a.active{
+      color:var(--gold);
+      border-color:rgba(184,156,106,0.55);
+    }
+    .home-link{
+      color:var(--cream); margin-right:10px; padding:6px 10px;
+      border:1px solid rgba(255,255,255,0.18); border-radius:2px;
+      font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+      transition:background .2s, color .2s, border-color .2s;
+    }
+    .home-link:hover{
+      background:rgba(184,156,106,.14);
+      color:var(--light-gold);
+      border-color:rgba(184,156,106,.45);
+    }
+
+    /* ===== Fullscreen slideshow ===== */
+    main { margin-top:56px; } /* header offset */
+
+    .hero{
+      position:relative; height:100vh; overflow:hidden; background:var(--ink);
+    }
+    .hero-slideshow{
+      position:absolute; inset:0; z-index:0;
+    }
+    .hero-slide{
+      position:absolute; inset:0;
+      background-size:cover; background-position:center;
+      opacity:0; transform:scale(1.05);
+      transition:opacity 1.6s ease-in-out, transform 6s ease-out;
+    }
+    .hero-slide.active{ opacity:1; transform:scale(1) }
+
+    /* Caption "slide1", "slide2", ... */
+    .hero-caption{
+      position:absolute; bottom:18px; right:20px; z-index:3;
+      font-size:.7rem; letter-spacing:.22em; text-transform:uppercase;
+      color:rgba(244,240,234,.85);
+      background:rgba(0,0,0,0.28);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:6px 10px;
+      backdrop-filter:blur(4px);
+    }
+
+    /* Soft gradient so UI is readable */
+    .hero-bg{
+      position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:
+        linear-gradient(160deg, transparent 40%, rgba(26,23,20,0.65) 100%),
+        linear-gradient(to bottom, rgba(26,23,20,0.15) 0%, transparent 30%, rgba(26,23,20,0.85) 100%);
+    }
+
+    /* Dots */
+    .slide-dots{
+      position:absolute; left:28px; bottom:34px; display:flex; gap:10px; z-index:3;
+    }
+    .slide-dot{
+      width:22px; height:2px; background:rgba(244,240,234,0.35);
+      cursor:pointer; transition:width .3s, background .3s, transform .2s;
+    }
+    .slide-dot:hover{ transform:scaleX(1.1) }
+    .slide-dot.active{ width:42px; background:var(--gold) }
+
+    /* ===== Arrow buttons (overlay on images) ===== */
+    .hero-arrow{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:3; /* above slides & gradient */
+      display:inline-flex; align-items:center; justify-content:center;
+      width:44px; height:44px;
+      color:var(--cream);
+      background:rgba(0,0,0,0.28);
+      border:1px solid rgba(255,255,255,0.18);
+      border-radius:50%;
+      cursor:pointer;
+      transition:background .2s, color .2s, border-color .2s, transform .15s;
+      backdrop-filter: blur(4px);
+    }
+    .hero-arrow:hover{
+      background:rgba(184,156,106,0.22);
+      color:var(--light-gold);
+      border-color:rgba(184,156,106,0.45);
+    }
+    .hero-arrow:active{ transform:translateY(-50%) scale(0.98) }
+    .hero-arrow.prev{ left:18px; }
+    .hero-arrow.next{ right:18px; }
+    @media (max-width: 480px){
+      .hero-arrow{ width:38px; height:38px }
+    }
+
+    /* ===== Series write-up ===== */
+    .series-copy{
+      background:var(--off-white); color:var(--ink);
+      padding:72px 24px; display:grid; place-items:center;
+    }
+    .series-inner{ width:min(1100px, 92vw); }
+    .eyebrow{
+      font-size:.62rem; letter-spacing:.42em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:16px;
+    }
+    .series-title{
+      font-family:'Cormorant Garamond', serif;
+      font-weight:300; line-height:1.15;
+      font-size:clamp(2.2rem, 5vw, 3.8rem);
+      margin:0 0 18px;
+    }
+    .series-sub{
+      color:#6b655e; font-size:1rem; letter-spacing:.03em; line-height:1.85;
+      margin:0 0 28px; max-width:740px;
+    }
+    .series-grid{
+      display:grid; gap:22px; grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+      margin-top:12px;
+    }
+    .note{
+      background:#fff; border:1px solid rgba(0,0,0,0.06);
+      padding:18px 18px 16px;
+    }
+    .note h3{
+      font-family:'Cormorant Garamond', serif; font-weight:300; margin:0 0 8px; font-size:1.2rem;
+      color:#2a2724;
+    }
+    .note p{ margin:0; color:#4a443e; line-height:1.7; font-size:.98rem }
+
+    .cta-row{
+      display:flex; gap:14px; flex-wrap:wrap; margin-top:28px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:14px 18px; border:1px solid var(--ink); color:var(--ink);
+      text-transform:uppercase; letter-spacing:.22em; font-size:.72rem;
+      transition:background .2s, color .2s, border-color .2s;
+    }
+    .btn:hover{ background:var(--ink); color:var(--cream); border-color:var(--ink) }
+
+    /* Mobile tweaks */
+    @media (max-width:768px){
+      .nav-links{ gap:10px }
+      .slide-dots{ left:20px; bottom:22px }
+      .home-link{ display:none } /* keep it clean on small screens; Home stays inside links below */
     }
   </style>
 </head>
-
 <body>
-  ../index.html← Back to Home</a>
 
-  <h1>Portraiture</h1>
+  <!-- ===== Top bar: Home + Portfolio links ===== -->
+  <header class="header" id="siteHeader" role="navigation" aria-label="Portfolio navigation">
+    <a class="home-link" href="../index.html">← Home</a>
+    <a class="brand" href="../index.html">UJ<span>Photography</span></a>
+    <nav class="nav-links" aria-label="Portfolio sections">
+      <a class="active" href="./portraiture.html">Portraiture</a>
+      <a href="./landscape.html">Landscape</a>
+      <a href="./wedding.html">Wedding</a>
+      <a href="./street.html">Street</a>
+      <a href="./automotive.html">Automotive</a>
+      <a href="./realestate.html">Real&nbsp;Estate</a>
+    </nav>
+  </header>
 
-  <div class="gallery">
-    ../images/portfolio/portraiture/1.jpg
-    ../images/portfolio/portraiture/2.jpg
-    ../images/portfolio/portraiture/3.jpg
-    ../images/portfolio/portraiture/4.jpg
-    ../images/portfolio/portraiture/5.jpg
-  </div>
+  <!-- ===== Fullscreen Slideshow ===== -->
+  <main>
+    <section class="hero" aria-label="Portraiture slideshow">
+      <div class="hero-slideshow" id="heroSlideshow"></div>
+
+      <!-- Arrows (overlay on images) -->
+      <button class="hero-arrow prev" id="prevArrow" aria-label="Previous slide">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
+      </button>
+      <button class="hero-arrow next" id="nextArrow" aria-label="Next slide">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+        </svg>
+      </button>
+
+      <!-- Caption + dots + gradient -->
+      <div class="hero-caption" id="heroCaption" aria-live="polite">slide1</div>
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="slide-dots" id="slideDots" aria-label="Slideshow navigation"></div>
+    </section>
+
+    <!-- ===== Series Write-up ===== -->
+    <section class="series-copy" aria-labelledby="seriesTitle">
+      <div class="series-inner">
+        <div class="eyebrow">Portfolio — People</div>
+        <h1 id="seriesTitle" class="series-title">Portraiture</h1>
+        <p class="series-sub">
+          Faces carry entire worlds. In this ongoing portrait series, I look for the quiet seconds
+          between poses—the breath before a smile, the softness after a laugh—where a person’s
+          story speaks in light. Each frame is built with simple direction, natural gestures,
+          and a palette that keeps the attention where it belongs: on the human presence.
+        </p>
+
+        <div class="series-grid">
+          <div class="note">
+            <h3>Approach</h3>
+            <p>
+              Minimal setups, intentional light, and gentle prompts. I balance environment and
+              expression to keep the photograph honest and cinematic at once.
+            </p>
+          </div>
+          <div class="note">
+            <h3>Mood</h3>
+            <p>
+              Warm, textured, and calm. I favor skin‑true tones and soft falloff to let eyes
+              and micro‑expressions carry the frame.
+            </p>
+          </div>
+          <div class="note">
+            <h3>For Clients</h3>
+            <p>
+              Portrait sessions are available for artists, brands, and private commissions.
+              On‑location or studio options, with guidance throughout.
+            </p>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn" href="mailto:ujwaljohnsonphotography@gmail.com">Book a Session →</a>
+          <a class="btn" href="../index.html#portfolio">Back to HOME →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ===== Header background on scroll
+    const headerEl = document.getElementById('siteHeader');
+    const onScroll = () => headerEl.classList.toggle('scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ===== Sequential image discovery & slider =====
+    (function () {
+      // ---- Configure your folder and naming here ----
+      const IMAGE_DIR   = '../images/portfolio/portraiture/'; // trailing slash required
+      const BASENAME    = 'slide';                             // slide1, slide2, ...
+      const EXTENSIONS  = ['jpg','jpeg','png','webp'];         // try in this order
+      const MAX_IMAGES  = 50;                                  // hard cap to avoid infinite loops
+      const STOP_AT_GAP = true;                                // stop when first missing index
+      const INTERVAL    = 5000;                                // 5 seconds
+
+      const hero = document.querySelector('.hero');
+      const stage = document.getElementById('heroSlideshow');
+      const dotsContainer = document.getElementById('slideDots');
+      const caption = document.getElementById('heroCaption');
+      const prevBtn = document.getElementById('prevArrow');
+      const nextBtn = document.getElementById('nextArrow');
+
+      let slides = [];
+      let current = 0;
+      let timerId = null;
+
+      // Try to resolve slideN with available extensions; return URL or null
+      function resolveImageUrl(index){
+        return new Promise((resolve) => {
+          let resolved = null;
+          let remaining = EXTENSIONS.length;
+
+          EXTENSIONS.forEach((ext) => {
+            const url = `${IMAGE_DIR}${BASENAME}${index}.${ext}`;
+            const img = new Image();
+            img.onload  = () => { if(!resolved){ resolved = url; resolve(url);} };
+            img.onerror = () => { if(--remaining === 0 && !resolved) resolve(null); };
+            // add a small cache buster so 404s aren't cached forever
+            img.src = url + `?v=${index}`;
+          });
+        });
+      }
+
+      async function loadSequential(){
+        for(let i=1; i<=MAX_IMAGES; i++){
+          const url = await resolveImageUrl(i);
+          if(url){
+            const slide = document.createElement('div');
+            slide.className = 'hero-slide' + (slides.length === 0 ? ' active' : '');
+            slide.style.backgroundImage = `url('${url}')`;
+            slide.setAttribute('role','img');
+            slide.setAttribute('aria-label', `${BASENAME}${i}`);
+            stage.appendChild(slide);
+            slides.push(slide);
+
+            // dot
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'slide-dot' + (slides.length === 1 ? ' active' : '');
+            dot.setAttribute('aria-label', `Go to ${BASENAME}${i}`);
+            dot.addEventListener('click', () => { goTo(slides.length-1); restart(); });
+            dotsContainer.appendChild(dot);
+          }else if(STOP_AT_GAP){
+            break; // stop at first gap
+          }
+        }
+      }
+
+      function updateCaption(){
+        caption.textContent = `${BASENAME}${current+1}`;
+      }
+
+      function goTo(index){
+        if (!slides.length) return;
+        slides[current].classList.remove('active');
+        dotsContainer.children[current]?.classList.remove('active');
+        current = (index + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dotsContainer.children[current]?.classList.add('active');
+        updateCaption();
+      }
+      function next(){ goTo(current + 1); }
+      function prev(){ goTo(current - 1); }
+
+      function start(){ stop(); if(slides.length > 1){ timerId = setInterval(next, INTERVAL); } }
+      function stop(){ if (timerId) clearInterval(timerId); timerId = null; }
+      function restart(){ start(); }
+
+      function wireControls(){
+        // Auto-play
+        start();
+
+        // Pause on hover (desktop)
+        hero.addEventListener('mouseenter', stop);
+        hero.addEventListener('mouseleave', start);
+
+        // Pause when tab hidden
+        document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') { next(); restart(); }
+          if (e.key === 'ArrowLeft')  { prev(); restart(); }
+        }, { passive: true });
+
+        // Touch swipe
+        let x0 = null;
+        hero.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+        hero.addEventListener('touchend', (e) => {
+          if (x0 === null) return;
+          const dx = e.changedTouches[0].clientX - x0;
+          const T = 40; // px
+          if (dx >  T) { prev(); restart(); }
+          if (dx < -T) { next(); restart(); }
+          x0 = null;
+        }, { passive: true });
+
+        // Buttons (the arrow buttons over the images)
+        prevBtn?.addEventListener('click', () => { prev(); restart(); });
+        nextBtn?.addEventListener('click', () => { next(); restart(); });
+      }
+
+      (async function init(){
+        await loadSequential();
+
+        if (!slides.length){
+          // Fallback if no slides found
+          const msg = document.createElement('div');
+          msg.style.position='absolute';
+          msg.style.inset='0';
+          msg.style.display='grid';
+          msg.style.placeItems='center';
+          msg.style.color='rgba(244,240,234,.85)';
+          msg.style.letterSpacing='.15em';
+          msg.style.textTransform='uppercase';
+          msg.style.background='linear-gradient(160deg, transparent 40%, rgba(26,23,20,0.65) 100%)';
+          msg.textContent = 'No slides found in images/portfolio/portraiture/';
+          stage.appendChild(msg);
+          caption.style.display = 'none';
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+          return;
+        }
+
+        // First caption
+        updateCaption();
+
+        // Hide arrows if only one image
+        if (slides.length < 2){
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+        }
+
+        wireControls();
+      })();
+    })();
+  </script>
+
 </body>
 </html>
