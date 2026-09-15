@@ -579,7 +579,7 @@
 
     /* ══════════════════════════════════════════
        POPULATE SERIES COPY
-    ════════════��═════════════════════════════ */
+    ══════════════════════════════════════════ */
     document.getElementById('seriesEyebrow').textContent = data.eyebrow;
 
     const headingEl = document.getElementById('seriesHeading');
@@ -613,8 +613,7 @@
     onScroll();
 
     /* ══════════════════════════════════════════
-       SLIDESHOW MODULE — LAZY LOADING VERSION
-       Loads images on-demand, not sequentially
+       SLIDESHOW MODULE
     ══════════════════════════════════════════ */
     (function Slideshow() {
       const IMAGE_DIR   = data.imageDir;
@@ -634,129 +633,63 @@
       const slideLabel= document.getElementById('slideLabel');
       const fillEl    = document.getElementById('progressFill');
 
-      let slides      = [];
-      let dots        = [];
-      let current     = 0;
-      let timer       = null;
-      let paused      = false;
-      let totalSlides = 0;
-      let urlCache    = {}; // Cache resolved URLs
+      let slides   = [];
+      let dots     = [];
+      let current  = 0;
+      let timer    = null;
+      let paused   = false;
 
-      /* Resolve image URL with fallback to different formats */
       function resolveUrl(index) {
         return new Promise(resolve => {
-          if (urlCache[index]) {
-            resolve(urlCache[index]);
-            return;
-          }
-
           let done = false;
           let pending = EXTENSIONS.length;
           EXTENSIONS.forEach(ext => {
             const img = new Image();
-            const url = `${IMAGE_DIR}${BASENAME}${index}.${ext}?_=${Date.now()}_${index}`;
-            img.onload  = () => {
-              if (!done) {
-                done = true;
-                urlCache[index] = url;
-                resolve(url);
-              }
-            };
-            img.onerror = () => {
-              if (--pending === 0 && !done) {
-                resolve(null);
-              }
-            };
+            const url = `${IMAGE_DIR}${BASENAME}${index}.${ext}?_=${index}`;
+            img.onload  = () => { if (!done) { done = true; resolve(url); } };
+            img.onerror = () => { if (--pending === 0 && !done) resolve(null); };
             img.src = url;
           });
         });
       }
 
-      /* Detect total number of images (quick scan) */
-      async function detectTotalImages() {
-        let found = 0;
+      async function loadAll() {
         for (let i = 1; i <= MAX_IMAGES; i++) {
           const url = await resolveUrl(i);
-          if (!url) {
-            if (STOP_AT_GAP) break;
-            else continue;
-          }
-          found++;
-        }
-        return found;
-      }
-
-      /* Load first image immediately */
-      async function loadFirstImage() {
-        const url = await resolveUrl(1);
-        if (!url) {
-          showEmpty();
-          return false;
-        }
-
-        const el = document.createElement('div');
-        el.className = 'slide active';
-        el.style.backgroundImage = `url('${url}')`;
-        el.setAttribute('role', 'img');
-        el.setAttribute('aria-label', `Portfolio photograph 1`);
-        stage.appendChild(el);
-        slides.push(el);
-
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'dot active';
-        dot.setAttribute('role', 'tab');
-        dot.setAttribute('aria-label', `Go to photo 1`);
-        dot.addEventListener('click', () => { goTo(0); restart(); });
-        dotsWrap.appendChild(dot);
-        dots.push(dot);
-
-        loading.classList.add('hidden');
-        updateMeta();
-        return true;
-      }
-
-      /* Load remaining images in background */
-      async function loadRemainingImages() {
-        let foundCount = 1; // We already have slide 1
-
-        for (let i = 2; i <= MAX_IMAGES; i++) {
-          const url = await resolveUrl(i);
-          if (!url) {
-            if (STOP_AT_GAP) break;
-            else continue;
-          }
+          if (!url) { if (STOP_AT_GAP) break; else continue; }
 
           const el = document.createElement('div');
           el.className = 'slide';
           el.style.backgroundImage = `url('${url}')`;
           el.setAttribute('role', 'img');
           el.setAttribute('aria-label', `Portfolio photograph ${i}`);
+          if (slides.length === 0) el.classList.add('active');
           stage.appendChild(el);
           slides.push(el);
 
           const dot = document.createElement('button');
           dot.type = 'button';
-          dot.className = 'dot';
+          dot.className = 'dot' + (slides.length === 1 ? ' active' : '');
           dot.setAttribute('role', 'tab');
           dot.setAttribute('aria-label', `Go to photo ${slides.length}`);
           dot.addEventListener('click', () => { goTo(slides.length - 1); restart(); });
           dotsWrap.appendChild(dot);
           dots.push(dot);
-
-          foundCount++;
         }
 
-        totalSlides = foundCount;
-        cntTotal.textContent = foundCount || '—';
+        cntTotal.textContent = slides.length || '—';
+        loading.classList.add('hidden');
 
-        if (foundCount < 2) {
+        if (!slides.length) { showEmpty(); return; }
+
+        if (slides.length < 2) {
           prevBtn.style.display = 'none';
           nextBtn.style.display = 'none';
           dotsWrap.style.display = 'none';
           fillEl.parentElement.style.display = 'none';
         }
 
+        updateMeta();
         start();
       }
 
@@ -835,16 +768,7 @@
           .forEach(el => el && (el.style.display = 'none'));
       }
 
-      async function init() {
-        // Load first image immediately
-        const hasFirst = await loadFirstImage();
-        if (!hasFirst) return;
-
-        // Load remaining images in background (non-blocking)
-        loadRemainingImages().then(wireControls);
-      }
-
-      init();
+      loadAll().then(wireControls);
     })();
   </script>
 
