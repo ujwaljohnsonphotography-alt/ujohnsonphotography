@@ -39,7 +39,7 @@ and a palette that keeps attention where it belongs: on human presence.`,
     ],
 
     /* ── Image folder (trailing slash required) ── */
-    imageDir:  '../images/portfolio/portraiture/',
+    imageDir:  'images/portraiture/',
     basename:  'slide',                         // files: slide1.jpg, slide2.jpg …
   },
 
@@ -72,7 +72,7 @@ the subject, not merely a backdrop.`,
       },
     ],
 
-    imageDir: '../images/portfolio/landscape/',
+    imageDir: 'images/landscape/',
     basename: 'slide',
   },
 
@@ -105,7 +105,7 @@ not performed.`,
       },
     ],
 
-    imageDir: '../images/portfolio/wedding/',
+    imageDir: 'images/wedding/',
     basename: 'slide',
   },
 
@@ -138,7 +138,7 @@ an ordinary corner becomes a photograph.`,
       },
     ],
 
-    imageDir: '../images/portfolio/street/',
+    imageDir: 'images/street/',
     basename: 'slide',
   },
 
@@ -171,7 +171,7 @@ on location and on track, never in sterile isolation.`,
       },
     ],
 
-    imageDir: '../images/portfolio/automotive/',
+    imageDir: 'images/automotive/',
     basename: 'slide',
   },
 
@@ -204,7 +204,7 @@ eerily empty. The goal is always an honest, beautiful image that accelerates a s
       },
     ],
 
-    imageDir: '../images/portfolio/realestate/',
+    imageDir: 'images/realestate/',
     basename: 'slide',
   },
 
@@ -237,7 +237,7 @@ in-situ lifestyle shots, and everything in between.`,
       },
     ],
 
-    imageDir: '../images/portfolio/localbusiness/',
+    imageDir: 'images/localbusiness/',
     basename: 'slide',
   },
 
