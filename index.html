@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UJPhotography —   Photographer</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="styleHeet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -71,6 +71,7 @@
   .hero {
     position: relative;
     height: 100vh;
+    height: 100svh;   /* phones: excludes the browser's address bar */
     display: flex;
     align-items: flex-end;
     padding: 0 60px 80px;
@@ -724,9 +725,128 @@
     .stats-bar { flex-direction: column; gap: 48px; padding: 60px 24px; }
     .stat-item { border-right: none; border-bottom: 1px solid rgba(184,156,106,0.2); padding: 0 0 48px; }
     .stat-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .testimonials-grid { grid-template-columns: 1fr; }
     footer { flex-direction: column; gap: 32px; text-align: center; }
-    .footer-links { flex-wrap: wrap; justify-content: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; gap: 4px 8px; }
+    .footer-links a { display: inline-block; padding: 12px 10px; font-size: 0.72rem; }
+
+    /* Testimonials: swipe sideways, next card peeks in */
+    .testimonials-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin: 0 -24px;
+      padding: 0 24px 8px;
+      scroll-padding: 0 24px;
+      scrollbar-width: none;
+    }
+    .testimonials-grid::-webkit-scrollbar { display: none; }
+    .testimonial-card {
+      flex: 0 0 85%;
+      scroll-snap-align: start;
+      padding: 36px 28px;
+      opacity: 1;              /* off-screen cards never "reveal", so show them all */
+      transform: none;
+    }
+
+    /* Bigger tap targets */
+    .cta-btn, .contact-btn { padding-top: 16px; padding-bottom: 16px; }
+    .contact-email a { display: inline-block; padding: 10px 0; }
+  }
+
+  /* ── MOBILE MENU ─────────────────────────────────────────── */
+  .swipe-hint {
+    display: none;
+    margin-top: 18px;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .menu-btn {
+    display: none;
+    width: 44px; height: 44px;
+    margin-right: -10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+  }
+  .menu-btn span {
+    position: absolute;
+    left: 11px; right: 11px;
+    height: 1.5px;
+    background: var(--off-white);
+    transition: transform 0.35s ease, opacity 0.2s, background 0.3s;
+  }
+  .menu-btn span:nth-child(1) { top: 16px; }
+  .menu-btn span:nth-child(2) { top: 22px; }
+  .menu-btn span:nth-child(3) { top: 28px; }
+  nav.scrolled .menu-btn span { background: var(--ink); }
+  body.menu-open .menu-btn span { background: var(--cream); }
+  body.menu-open .menu-btn span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  body.menu-open .menu-btn span:nth-child(2) { opacity: 0; }
+  body.menu-open .menu-btn span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  body.menu-open { overflow: hidden; }
+  body.menu-open .nav-logo { color: var(--cream); }
+  /* nav (logo + close button) sits above the open menu */
+  body.menu-open nav { background: transparent; backdrop-filter: none; z-index: 400; }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: var(--ink);
+    padding: 110px 32px 40px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+  }
+  body.menu-open .mobile-menu {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.35s ease;
+  }
+  .mobile-menu ul { list-style: none; }
+  .mobile-menu a {
+    display: block;
+    padding: 10px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .mobile-menu a:hover, .mobile-menu a:focus-visible { color: var(--light-gold); }
+  .mobile-menu .menu-label {
+    margin: 22px 0 4px;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .mobile-menu .menu-sub a {
+    padding: 9px 0 9px 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244,240,234,0.75);
+    border-left: 1px solid rgba(184,156,106,0.3);
+  }
+  .mobile-menu .menu-email {
+    margin-top: 36px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+  }
+
+  @media (max-width: 768px) {
+    .menu-btn { display: block; }
+    .swipe-hint { display: block; }
   }
   .portfolio-grid {
   display: grid;
@@ -847,8 +967,12 @@ nav.scrolled .has-dropdown > .dropdown-toggle { color: var(--warm-gray); }
 nav:not(.scrolled) .has-dropdown > .dropdown-toggle::after { color: rgba(250,248,245,0.85); }
 nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); }
 
-/* Mobile note: .nav-links are hidden in your CSS under 768px.
-   If you later add a burger menu, the submenu styles will still work. */
+/* Portfolio cards on phones: two per row (kept after the base card rules) */
+@media (max-width: 768px) {
+  .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .portfolio-card img { height: 210px; display: block; }
+  .portfolio-title { padding: 10px 12px; font-size: 1.05rem; letter-spacing: 0.06em; }
+}
 </style>
 </head>
 <body>
@@ -873,7 +997,31 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
 </li>
     <li><a href="javascript:void(0)" onclick="navScrollTo('contact')">Contact</a></li>
   </ul>
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU (phones only — opened by the ☰ button) -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <ul>
+    <li><a href="#about" data-scroll="about">About</a></li>
+    <li class="menu-label">Portfolio</li>
+    <li>
+      <ul class="menu-sub">
+        <li><a href="portfolio/gallery.html?series=portraiture">Portraiture</a></li>
+        <li><a href="portfolio/gallery.html?series=landscape">Landscape</a></li>
+        <li><a href="portfolio/gallery.html?series=wedding">Wedding</a></li>
+        <li><a href="portfolio/gallery.html?series=street">Street</a></li>
+        <li><a href="portfolio/gallery.html?series=automotive">Automotive</a></li>
+        <li><a href="portfolio/gallery.html?series=localbusiness">Local Businesses</a></li>
+      </ul>
+    </li>
+    <li style="margin-top:22px"><a href="#testimonials" data-scroll="testimonials">Testimonials</a></li>
+    <li><a href="#contact" data-scroll="contact">Contact</a></li>
+  </ul>
+  <a class="menu-email" href="mailto:ujwaljohnsonphotography@gmail.com">ujwaljohnsonphotography@gmail.com</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="hero">
@@ -993,7 +1141,7 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
 
     <div class="testimonials-grid">
       <div class="testimonial-card">
-        <p class="testimonial-quote">"Your talent combined with hard work and out-of-the-box ideas always astoniHes our team with amazing results. Whenever our designs land in your hands, something beautiful is certain to follow."</p>
+        <p class="testimonial-quote">"Your talent combined with hard work and out-of-the-box ideas always astonishes our team with amazing results. Whenever our designs land in your hands, something beautiful is certain to follow."</p>
         <div class="testimonial-author">Son de Flor Team</div>
         <div class="testimonial-company">Linen Fashion Brand</div>
       </div>
@@ -1003,7 +1151,7 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
         <div class="testimonial-company">Artist & Collaborator</div>
       </div>
       <div class="testimonial-card">
-        <p class="testimonial-quote">"Working with UJPhotography was a dream come true. He interpreted my ideas perfectly and executed them flawlessly. The finiHed photos are exactly what I wanted, both for my label and personally."</p>
+        <p class="testimonial-quote">"Working with UJPhotography was a dream come true. He interpreted my ideas perfectly and executed them flawlessly. The finished photos are exactly what I wanted, both for my label and personally."</p>
         <div class="testimonial-author">Lowana</div>
         <div class="testimonial-company">Vanyanis Designer Label</div>
       </div>
@@ -1023,6 +1171,7 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
         <div class="testimonial-company">International Model</div>
       </div>
     </div>
+    <div class="swipe-hint" aria-hidden="true">Swipe for more &rarr;</div>
   </div>
 </section>
 
@@ -1080,12 +1229,12 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
   <div class="footer-logo">UJPhotography</div>
   <ul class="footer-links">
     <li><a href="javascript:void(0)" onclick="navScrollTo('about')">About</a></li>
-    <li><a href="javascript:void(0)" onclick="navScrollTo('portfolio')">Portfolio</a></li>
-    <li><a href="javascript:void(0)" onclick="navScrollTo('experience')">Experience</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('portfolio-grid')">Portfolio</a></li>
+    <li><a href="javascript:void(0)" onclick="navScrollTo('testimonials')">Testimonials</a></li>
     <li><a href="javascript:void(0)" onclick="navScrollTo('contact')">Contact</a></li>
     <li><a href="mailto:ujwaljohnsonphotography@gmail.com">Email</a></li>
   </ul>
-  <div class="footer-copy">© 2024 UJPhotography. All rights reserved.</div>
+  <div class="footer-copy">© <span id="footerYear">2026</span> UJPhotography. All rights reserved.</div>
 </footer>
 
 <script>
@@ -1094,6 +1243,32 @@ function navScrollTo(id) {
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+// Mobile menu (☰ button, phones only)
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+function setMenu(open) {
+  document.body.classList.toggle('menu-open', open);
+  menuBtn.setAttribute('aria-expanded', open);
+  menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  mobileMenu.setAttribute('aria-hidden', !open);
+}
+
+menuBtn.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', e => {
+  const target = a.dataset.scroll;
+  setMenu(false);
+  // Scroll once the menu has closed and the page can scroll again
+  if (target) { e.preventDefault(); setTimeout(() => navScrollTo(target), 60); }
+}));
+
+// Close the menu if the screen grows past phone size (e.g. rotating a tablet)
+window.matchMedia('(min-width: 769px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
 
 // Slideshow
 const slides = document.querySelectorAll('.hero-slide');
