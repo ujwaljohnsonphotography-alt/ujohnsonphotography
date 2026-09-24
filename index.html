@@ -105,6 +105,12 @@
     transform: scale(1.04);
     transition: opacity 1.6s ease-in-out, transform 6s ease-out;
   }
+  .hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 
   .hero-slide.active {
     opacity: 1;
@@ -874,28 +880,25 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
   <!-- Hero Slideshow -->
   <!-- ============================================================
        HERO SLIDESHOW IMAGES
-       To replace with your own photos:
-       1. Add your images to the  images/  folder next to index.html
-       2. Name them: hero1.jpg, hero2.jpg, hero3.jpg, hero4.jpg, hero5.jpg
-          OR change the src values below to match your filenames.
-       Recommended size: 1600px wide. Both landscape & portrait work.
-       Add or remove <div> lines to change the number of slides.
-
-       Currently showing: demo photos from Unsplash (via onerror fallback)
-       Once you place your own images in the images/ folder,
-       the demo photos will automatically be replaced.
+       To change the photos:
+       1. Put the full-size photo in ujphotography-originals/ as heroN.jpg
+       2. Run:  python tools/optimize_images.py
+          (creates images/heroN-1200.webp and images/heroN-2400.webp)
+       3. Add or remove <div data-img="images/heroN"> lines below.
+       Only the first slide loads up front; the rest load one step
+       ahead of the slideshow.
   ============================================================ -->
   <div class="hero-slideshow" id="heroSlideshow">
-    <div class="hero-slide active" style="background-image: url('images/hero1.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero2.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero3.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero4.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero5.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero6.jpg')"></div>
-    <div class="hero-slide" style="background-image: url('images/hero7.jpg')"></div>
-   <div class="hero-slide" style="background-image: url('images/hero8.jpg')"></div>
-   <div class="hero-slide" style="background-image: url('images/hero9.jpg')"></div>
-   <div class="hero-slide" style="background-image: url('images/hero10.jpg')"></div>
+    <div class="hero-slide active"><img src="images/hero1-1200.webp" srcset="images/hero1-1200.webp 1200w, images/hero1-2400.webp 2400w" sizes="100vw" alt="" fetchpriority="high"></div>
+    <div class="hero-slide" data-img="images/hero2"></div>
+    <div class="hero-slide" data-img="images/hero3"></div>
+    <div class="hero-slide" data-img="images/hero4"></div>
+    <div class="hero-slide" data-img="images/hero5"></div>
+    <div class="hero-slide" data-img="images/hero6"></div>
+    <div class="hero-slide" data-img="images/hero7"></div>
+    <div class="hero-slide" data-img="images/hero8"></div>
+    <div class="hero-slide" data-img="images/hero9"></div>
+    <div class="hero-slide" data-img="images/hero10"></div>
   </div>
 
   <div class="hero-bg"></div>
@@ -940,37 +943,39 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
 
   <div class="portfolio-grid">
    <a class="portfolio-card" href="portfolio/gallery.html?series=portraiture">
-  <img src="portfolio/images/portraiture/thumb.jpg" alt="Portraiture">
+  <img src="images/portfolio/portraiture/thumb.webp" alt="Portraiture" loading="lazy" decoding="async">
   <div class="portfolio-title">Portraiture</div>
 </a>
 
 <a class="portfolio-card" href="portfolio/gallery.html?series=landscape">
-  <img src="portfolio/images/landscape/thumb.jpg" alt="Landscape">
+  <img src="images/portfolio/landscape/thumb.webp" alt="Landscape" loading="lazy" decoding="async">
   <div class="portfolio-title">Landscape</div>
 </a>
 
 <a class="portfolio-card" href="portfolio/gallery.html?series=street">
-  <img src="portfolio/images/street/thumb.jpg" alt="Street Photography">
+  <img src="images/portfolio/street/thumb.webp" alt="Street Photography" loading="lazy" decoding="async">
   <div class="portfolio-title">Street</div>
 </a>
 
 <a class="portfolio-card" href="portfolio/gallery.html?series=automotive">
-  <img src="portfolio/images/automotive/thumb.jpg" alt="Automotive">
+  <img src="images/portfolio/automotive/thumb.webp" alt="Automotive" loading="lazy" decoding="async">
   <div class="portfolio-title">Automotive</div>
 </a>
 
+<!-- Real Estate: hidden until photos are added to ujphotography-originals/portfolio/realestate/
 <a class="portfolio-card" href="portfolio/gallery.html?series=realestate">
-  <img src="portfolio/images/realestate/thumb.jpg" alt="Real Estate">
+  <img src="images/portfolio/realestate/thumb.webp" alt="Real Estate" loading="lazy" decoding="async">
   <div class="portfolio-title">Real Estate</div>
 </a>
+-->
 
 <a class="portfolio-card" href="portfolio/gallery.html?series=wedding">
-  <img src="portfolio/images/wedding/thumb.jpg" alt="Wedding">
+  <img src="images/portfolio/wedding/thumb.webp" alt="Wedding" loading="lazy" decoding="async">
   <div class="portfolio-title">Wedding</div>
 </a>
 
 <a class="portfolio-card" href="portfolio/gallery.html?series=localbusiness">
-  <img src="portfolio/images/localbusiness/thumb.jpg" alt="Local Business">
+  <img src="images/portfolio/localbusiness/thumb.webp" alt="Local Business" loading="lazy" decoding="async">
   <div class="portfolio-title">Local Business</div>
 </a>
   </div>
@@ -1048,7 +1053,9 @@ nav.scrolled .has-dropdown > .dropdown-toggle::after { color: var(--warm-gray); 
       ============================================================ -->
       <div class="about-photo">
         <img
-          src="images/about.jpg"
+          src="images/about-1200.webp"
+          loading="lazy"
+          decoding="async"
           data-fallback="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80"
           onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback}"
           alt="UJPhotography portrait" />
@@ -1088,23 +1095,27 @@ function navScrollTo(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── IMAGE LOADER ──────────────────────────────────────────────
-// For each hero slide, try loading the local image first.
-// If it fails (file not found), fall back to the demo Unsplash URL.
-// Once you place your own images in images/, the demos are replaced automatically.
-// document.querySelectorAll('.hero-slide').forEach(slide => {
-//   const local = slide.dataset.local;
-//   const fallback = slide.dataset.fallback;
-//   const tester = new Image();
-//   tester.onload = () => slide.style.backgroundImage = `url('${local}')`;
-//   tester.onerror = () => slide.style.backgroundImage = `url('${fallback}')`;
-//   tester.src = local;
-// });
-
 // Slideshow
 const slides = document.querySelectorAll('.hero-slide');
 const dotsContainer = document.getElementById('slideDots');
 let current = 0;
+
+// Lazy-load a slide's image (the browser picks 1200 or 2400 via srcset).
+function loadSlide(i) {
+  const slide = slides[i];
+  if (!slide || !slide.dataset.img || slide.querySelector('img')) return;
+  const base = slide.dataset.img;
+  const img = document.createElement('img');
+  img.alt = '';
+  img.decoding = 'async';
+  img.sizes = '100vw';
+  img.srcset = `${base}-1200.webp 1200w, ${base}-2400.webp 2400w`;
+  img.src = `${base}-1200.webp`;
+  slide.appendChild(img);
+}
+
+// Once the page has loaded, fetch the next slide in the background.
+window.addEventListener('load', () => loadSlide(1));
 
 // Create dots
 slides.forEach((_, i) => {
@@ -1115,6 +1126,8 @@ slides.forEach((_, i) => {
 });
 
 function goTo(index) {
+  loadSlide(index);
+  loadSlide((index + 1) % slides.length);
   slides[current].classList.remove('active');
   dotsContainer.children[current].classList.remove('active');
   current = index;

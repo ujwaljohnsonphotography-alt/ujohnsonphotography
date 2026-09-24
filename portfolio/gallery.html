@@ -58,7 +58,7 @@
       z-index: 9999;
       pointer-events: none;
       opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' num[...]
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
       background-size: 180px;
     }
 
@@ -74,7 +74,7 @@
       justify-content: space-between;
       padding: 0 28px;
       height: 62px;
-      background: linear-gradient(to bottom, rgba(15,13,11,0.92) 0%, rgba(15,13,11,0) 100%);
+      background: rgba(15,13,11,0.94);      /* solid, so nav stays readable over photos */
       transition: background 0.4s var(--ease-out), backdrop-filter 0.4s;
     }
     .header.scrolled {
@@ -100,8 +100,9 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      font-size: 0.62rem;
-      letter-spacing: 0.26em;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--cream-dim);
       border: 1px solid var(--border);
@@ -118,121 +119,31 @@
       display: flex;
       align-items: center;
       gap: 2px;
+      min-width: 0;
+      overflow-x: auto;                     /* scrolls sideways if links don't fit */
+      scrollbar-width: none;
     }
+    .nav::-webkit-scrollbar { display: none; }
     .nav a {
-      font-size: 0.6rem;
-      letter-spacing: 0.26em;
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--cream-dim);
-      padding: 8px 10px;
+      color: rgba(242,237,230,0.86);
+      padding: 8px 12px;
       border-bottom: 1px solid transparent;
       transition: color 0.2s, border-color 0.2s;
       white-space: nowrap;
     }
     .nav a:hover { color: var(--gold-light); }
     .nav a.active {
-      color: var(--gold);
-      border-color: var(--border-gold);
+      color: var(--gold-light);
+      border-color: var(--gold);
     }
 
     /* ══════════════════════════════════════════
-       HERO — FULLSCREEN SLIDESHOW
+       SHARED CONTROLS (lightbox arrows + spinner)
     ══════════════════════════════════════════ */
-    .hero {
-      position: relative;
-      height: 100svh;
-      min-height: 520px;
-      background: var(--ink);
-      overflow: hidden;
-    }
-
-    .hero-stage {
-      position: absolute;
-      inset: 0;
-    }
-
-    /* KEY FIX: contain keeps entire image visible, no cropping */
-    .slide {
-      position: absolute;
-      inset: 0;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-color: var(--ink);       /* fills pillarbox/letterbox areas */
-      opacity: 0;
-      transform: scale(1.03);
-      transition: opacity 1.8s var(--ease-out), transform 7s var(--ease-out);
-      will-change: opacity, transform;
-    }
-    .slide.active { opacity: 1; transform: scale(1); }
-
-    .hero-vignette {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      background:
-        radial-gradient(ellipse at center, transparent 50%, rgba(15,13,11,0.55) 100%),
-        linear-gradient(to bottom, rgba(15,13,11,0.45) 0%, transparent 20%, transparent 75%, rgba(15,13,11,0.9) 100%);
-    }
-
-    .slide-counter {
-      position: absolute;
-      top: 78px; right: 28px;
-      z-index: 10;
-      display: flex;
-      align-items: baseline;
-      gap: 5px;
-      font-size: 0.6rem;
-      letter-spacing: 0.22em;
-      color: var(--cream-dim);
-      text-transform: uppercase;
-    }
-    .slide-counter .current-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 300;
-      color: var(--gold);
-      line-height: 1;
-      min-width: 2ch;
-    }
-    .slide-counter .sep { opacity: 0.4; font-size: 0.75rem; }
-
-    .progress-bar {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      z-index: 10;
-      height: 2px;
-      background: rgba(242,237,230,0.08);
-    }
-    .progress-fill {
-      height: 100%;
-      background: var(--gold);
-      transform-origin: left;
-      transform: scaleX(0);
-      transition: transform linear;
-    }
-
-    .dots {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: rgba(242,237,230,0.3);
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s var(--ease-out);
-    }
-    .dot.active { background: var(--gold); transform: scale(1.3); }
-
     .arrow {
       position: absolute;
       top: 50%;
@@ -255,26 +166,6 @@
     .arrow.prev { left: 22px; }
     .arrow.next { right: 22px; }
 
-    .slide-label {
-      position: absolute;
-      bottom: 22px; right: 28px;
-      z-index: 10;
-      font-size: 0.58rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: rgba(242,237,230,0.5);
-    }
-
-    .hero-loading {
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      display: grid;
-      place-items: center;
-      background: var(--ink);
-      transition: opacity 0.6s var(--ease-out);
-    }
-    .hero-loading.hidden { opacity: 0; pointer-events: none; }
     .loader-ring {
       width: 36px; height: 36px;
       border: 1px solid var(--border);
@@ -376,6 +267,143 @@
     .btn-ghost:hover { border-color: #1a1714; background: #1a1714; color: var(--off-white); }
 
     /* ══════════════════════════════════════════
+       OVERVIEW GRID — every photo in the series
+    ══════════════════════════════════════════ */
+    .overview {
+      background: var(--ink);
+      padding: 80px 28px 96px;              /* just clears the fixed header */
+      min-height: 100svh;
+    }
+    .overview-inner { width: 100%; }
+    /* Page title stays in the HTML for search engines / screen readers,
+       but isn't shown — the photos and the nav bar speak for themselves. */
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .overview-empty {
+      padding: 30vh 0;
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+    }
+    .photo-grid {
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) forwards;
+    }
+
+    /* Masonry: photos keep their natural shape. JS places each photo in the
+       shortest column so the order reads left-to-right, top-to-bottom. */
+    .photo-grid { display: flex; align-items: flex-start; gap: 14px; }
+    .photo-col  { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+    .photo-tile {
+      display: block;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      background: var(--ink-soft);
+      cursor: zoom-in;
+    }
+    .photo-tile img {
+      display: block;
+      width: 100%;
+      height: auto;
+      transform: scale(1);
+      transition: transform 0.9s var(--ease-out), opacity 0.6s;
+      opacity: 0;
+    }
+    .photo-tile img.loaded { opacity: 1; }
+    .photo-tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(15,13,11,0);
+      transition: background 0.5s var(--ease-out);
+      pointer-events: none;
+    }
+    .photo-tile:hover img,
+    .photo-tile:focus-visible img { transform: scale(1.06); }
+    .photo-tile:hover::after { background: rgba(15,13,11,0.12); }
+    .photo-tile:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+
+    /* ══════════════════════════════════════════
+       LIGHTBOX
+    ══════════════════════════════════════════ */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(12,10,8,0.985);
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s var(--ease-out), visibility 0s linear 0.35s;
+    }
+    .lightbox.open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.35s var(--ease-out);
+    }
+    body.lb-open { overflow: hidden; }
+
+    .lb-figure {
+      position: absolute;
+      inset: 64px 84px;
+      display: grid;
+      place-items: center;
+    }
+    .lb-img {                               /* whole photo always fits the screen */
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transform: scale(0.985);
+      transition: opacity 0.35s var(--ease-out), transform 0.5s var(--ease-out);
+    }
+    .lb-img.loaded { opacity: 1; transform: scale(1); }
+    .lb-spinner { position: absolute; }
+    .lb-img.loaded + .lb-spinner { display: none; }
+
+    .lb-counter {
+      position: absolute;
+      top: 22px; left: 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      color: var(--cream-dim);
+    }
+    .lb-counter .current-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .lb-close {
+      position: absolute;
+      top: 14px; right: 18px;
+      width: 44px; height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cream);
+      border-radius: 50%;
+      transition: color 0.2s, background 0.2s;
+    }
+    .lb-close:hover { color: var(--gold-light); background: rgba(242,237,230,0.06); }
+    .lightbox .arrow { z-index: 2; }
+
+    /* ══════════════════════════════════════════
        FOOTER
     ══════════════════════════════════════════ */
     .footer {
@@ -397,22 +425,33 @@
     ══════════════════════════════════════════ */
     @media (max-width: 768px) {
       .home-link { display: none; }
-      .nav { gap: 0; }
-      .nav a { padding: 8px 7px; font-size: 0.58rem; letter-spacing: 0.2em; }
+      .header { gap: 12px; }
+      .nav {                                /* swipe sideways when links don't fit */
+        gap: 0;
+        min-width: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-mask-image: linear-gradient(to right, transparent 0, #000 12px, #000 calc(100% - 20px), transparent 100%);
+                mask-image: linear-gradient(to right, transparent 0, #000 12px, #000 calc(100% - 20px), transparent 100%);
+      }
+      .nav::-webkit-scrollbar { display: none; }
+      .nav a { padding: 8px 9px; font-size: 0.68rem; letter-spacing: 0.14em; }
       .arrow { width: 40px; height: 40px; }
       .arrow.prev { left: 12px; }
       .arrow.next { right: 12px; }
-      .slide-counter { top: 70px; right: 16px; }
       .series { padding: 64px 22px 60px; }
       .notes-grid { grid-template-columns: 1fr; }
       .footer { justify-content: center; text-align: center; }
+      .overview { padding: 72px 8px 64px; }
+      .photo-grid, .photo-col { gap: 8px; }
+      .lb-figure { inset: 64px 0 72px; }
+      .lightbox .arrow { top: auto; bottom: 14px; transform: none; }
+      .lightbox .arrow:active { transform: scale(0.95); }
     }
 
     @media (max-width: 480px) {
       .header { padding: 0 16px; }
-      .nav a { padding: 8px 5px; font-size: 0.54rem; letter-spacing: 0.14em; }
-      .slide-label { display: none; }
-      .dots { gap: 6px; }
+      .nav a { padding: 8px 8px; font-size: 0.66rem; letter-spacing: 0.12em; }
     }
 
     /* ══════════════════════════════════════════
@@ -455,38 +494,14 @@
     <nav class="nav" id="siteNav" aria-label="Portfolio sections"></nav>
   </header>
 
-  <!-- ══════════════════════════════════════════
-       HERO SLIDESHOW
-  ══════════════════════════════════════════ -->
   <main>
-    <section class="hero" aria-label="Portfolio slideshow" id="heroSection">
-      <div class="hero-loading" id="heroLoading" aria-hidden="true">
-        <div class="loader-ring"></div>
-      </div>
-      <div class="hero-stage" id="heroStage"></div>
-      <div class="hero-vignette" aria-hidden="true"></div>
-
-      <div class="slide-counter" aria-live="polite" aria-atomic="true">
-        <span class="current-num" id="counterCurrent">01</span>
-        <span class="sep">/</span>
-        <span id="counterTotal">—</span>
-      </div>
-
-      <button class="arrow prev" id="prevBtn" aria-label="Previous photo">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-          <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-        </svg>
-      </button>
-      <button class="arrow next" id="nextBtn" aria-label="Next photo">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-          <path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-        </svg>
-      </button>
-
-      <div class="dots" id="dotsContainer" role="tablist" aria-label="Slide navigation"></div>
-      <div class="slide-label" id="slideLabel" aria-hidden="true"></div>
-      <div class="progress-bar" aria-hidden="true">
-        <div class="progress-fill" id="progressFill"></div>
+    <!-- ══════════════════════════════════════════
+         OVERVIEW GRID — tiles injected by JS
+    ══════════════════════════════════════════ -->
+    <section class="overview" id="overview" aria-labelledby="overviewTitle">
+      <div class="overview-inner">
+        <h1 class="visually-hidden" id="overviewTitle"></h1>
+        <div class="photo-grid" id="photoGrid"></div>
       </div>
     </section>
 
@@ -499,7 +514,7 @@
           <span class="eyebrow-line" aria-hidden="true"></span>
           <span class="eyebrow-text" id="seriesEyebrow"></span>
         </div>
-        <h1 id="seriesHeading" class="series-heading"></h1>
+        <h2 id="seriesHeading" class="series-heading"></h2>
         <p class="series-body" id="seriesBody"></p>
         <div class="divider" aria-hidden="true"></div>
         <div class="notes-grid" id="notesGrid"></div>
@@ -517,6 +532,36 @@
   </main>
 
   <!-- ══════════════════════════════════════════
+       LIGHTBOX
+  ══════════════════════════════════════════ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" aria-hidden="true">
+    <div class="lb-counter" aria-live="polite" aria-atomic="true">
+      <span class="current-num" id="lbCurrent">01</span>
+      <span class="sep">/</span>
+      <span id="lbTotal"></span>
+    </div>
+    <button class="lb-close" id="lbClose" aria-label="Close photo viewer">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+        <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+    <div class="lb-figure" id="lbFigure">
+      <img class="lb-img" id="lbImg" alt="" />
+      <div class="loader-ring lb-spinner" aria-hidden="true"></div>
+    </div>
+    <button class="arrow prev" id="lbPrev" aria-label="Previous photo">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+      </svg>
+    </button>
+    <button class="arrow next" id="lbNext" aria-label="Next photo">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+        <path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
        FOOTER
   ══════════════════════════════════════════ -->
   <footer class="footer">
@@ -526,6 +571,7 @@
 
   <!-- Load gallery data first -->
   <script src="gallery-data.js"></script>
+  <script src="gallery-images.js"></script>
 
   <script>
     'use strict';
@@ -566,7 +612,8 @@
        BUILD NAV
     ══════════════════════════════════════════ */
     const navEl = document.getElementById('siteNav');
-    NAV_SERIES.forEach(({ key, label }) => {
+    /* Series with no photos yet are left out of the nav */
+    NAV_SERIES.filter(({ key }) => (GALLERY_IMAGES[key] || []).length).forEach(({ key, label }) => {
       const a = document.createElement('a');
       a.href = `gallery.html?series=${key}`;
       a.textContent = label;
@@ -576,6 +623,9 @@
       }
       navEl.appendChild(a);
     });
+    /* On small screens, make sure the current section's link is visible */
+    const activeLink = navEl.querySelector('.active');
+    if (activeLink) navEl.scrollLeft = activeLink.offsetLeft - navEl.offsetLeft - 24;
 
     /* ══════════════════════════════════════════
        POPULATE SERIES COPY
@@ -613,162 +663,172 @@
     onScroll();
 
     /* ══════════════════════════════════════════
-       SLIDESHOW MODULE
+       OVERVIEW GRID + LIGHTBOX MODULE
     ══════════════════════════════════════════ */
-    (function Slideshow() {
-      const IMAGE_DIR   = data.imageDir;
-      const BASENAME    = data.basename || 'slide';
-      const EXTENSIONS  = ['jpg', 'jpeg', 'webp', 'png'];
-      const MAX_IMAGES  = 60;
-      const STOP_AT_GAP = true;
-      const INTERVAL    = 5500;
+    (function Overview() {
+      const IMAGE_DIR = data.imageDir;
+      const PHOTOS    = GALLERY_IMAGES[seriesKey] || [];
+      const pad       = n => String(n).padStart(2, '0');
 
-      const stage     = document.getElementById('heroStage');
-      const dotsWrap  = document.getElementById('dotsContainer');
-      const loading   = document.getElementById('heroLoading');
-      const prevBtn   = document.getElementById('prevBtn');
-      const nextBtn   = document.getElementById('nextBtn');
-      const cntCur    = document.getElementById('counterCurrent');
-      const cntTotal  = document.getElementById('counterTotal');
-      const slideLabel= document.getElementById('slideLabel');
-      const fillEl    = document.getElementById('progressFill');
+      /* Real pixel width of a generated file (its longest edge is `edge`,
+         never upscaled) — srcset needs true widths, esp. for portrait shots. */
+      const widthAt = (p, edge) => Math.round(p.w * Math.min(1, edge / Math.max(p.w, p.h)));
+      const srcset  = (p, edges) =>
+        edges.map(e => `${IMAGE_DIR}${p.n}-${e}.webp ${widthAt(p, e)}w`).join(', ');
 
-      let slides   = [];
-      let dots     = [];
-      let current  = 0;
-      let timer    = null;
-      let paused   = false;
+      const grid = document.getElementById('photoGrid');
 
-      function resolveUrl(index) {
-        return new Promise(resolve => {
-          let done = false;
-          let pending = EXTENSIONS.length;
-          EXTENSIONS.forEach(ext => {
-            const img = new Image();
-            const url = `${IMAGE_DIR}${BASENAME}${index}.${ext}?_=${index}`;
-            img.onload  = () => { if (!done) { done = true; resolve(url); } };
-            img.onerror = () => { if (--pending === 0 && !done) resolve(null); };
-            img.src = url;
-          });
-        });
+      document.getElementById('overviewTitle').textContent = `${data.heading} — Portfolio`;
+      if (!PHOTOS.length) {
+        grid.outerHTML = '<p class="overview-empty">Photos coming soon</p>';
+        return;
       }
 
-      async function loadAll() {
-        for (let i = 1; i <= MAX_IMAGES; i++) {
-          const url = await resolveUrl(i);
-          if (!url) { if (STOP_AT_GAP) break; else continue; }
+      /* ── Build tiles ── */
+      const tiles = PHOTOS.map((p, i) => {
+        const base = IMAGE_DIR + p.n;
+        const a = document.createElement('a');
+        a.className = 'photo-tile';
+        a.href = `${base}-2400.webp`;           // still works without JS
+        a.setAttribute('aria-label', `Open photograph ${i + 1} of ${PHOTOS.length}`);
 
-          const el = document.createElement('div');
-          el.className = 'slide';
-          el.style.backgroundImage = `url('${url}')`;
-          el.setAttribute('role', 'img');
-          el.setAttribute('aria-label', `Portfolio photograph ${i}`);
-          if (slides.length === 0) el.classList.add('active');
-          stage.appendChild(el);
-          slides.push(el);
+        const img = document.createElement('img');
+        img.alt = '';
+        img.loading = i < 6 ? 'eager' : 'lazy';  // first screenful loads right away
+        if (i < 3) img.fetchPriority = 'high';
+        img.decoding = 'async';
+        img.width = p.w;                        // reserves space → no layout jump
+        img.height = p.h;
+        img.sizes = '(max-width: 768px) 50vw, (min-width: 1600px) 25vw, 33vw';
+        img.srcset = srcset(p, [600, 1200]);
+        img.src = `${base}-600.webp`;
+        img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
 
-          const dot = document.createElement('button');
-          dot.type = 'button';
-          dot.className = 'dot' + (slides.length === 1 ? ' active' : '');
-          dot.setAttribute('role', 'tab');
-          dot.setAttribute('aria-label', `Go to photo ${slides.length}`);
-          dot.addEventListener('click', () => { goTo(slides.length - 1); restart(); });
-          dotsWrap.appendChild(dot);
-          dots.push(dot);
+        a.appendChild(img);
+        a.addEventListener('click', e => { e.preventDefault(); open(i); });
+        return a;
+      });
+
+      /* ── Masonry layout: 2 / 3 / 4 columns depending on screen width ── */
+      const narrow = window.matchMedia('(max-width: 768px)');
+      const wide   = window.matchMedia('(min-width: 1600px)');
+      function layout() {
+        const count = narrow.matches ? 2 : wide.matches ? 4 : 3;
+        const cols = Array.from({ length: count }, () => {
+          const c = document.createElement('div');
+          c.className = 'photo-col';
+          return c;
+        });
+        const heights = new Array(count).fill(0);
+        tiles.forEach((tile, i) => {
+          const k = heights.indexOf(Math.min(...heights));
+          cols[k].appendChild(tile);
+          heights[k] += PHOTOS[i].h / PHOTOS[i].w;
+        });
+        grid.replaceChildren(...cols);
+      }
+      layout();
+      narrow.addEventListener('change', layout);
+      wide.addEventListener('change', layout);
+
+      /* ── Lightbox ── */
+      const lb      = document.getElementById('lightbox');
+      const lbImg   = document.getElementById('lbImg');
+      const lbCur   = document.getElementById('lbCurrent');
+      const lbClose = document.getElementById('lbClose');
+      const lbPrev  = document.getElementById('lbPrev');
+      const lbNext  = document.getElementById('lbNext');
+      const lbFig   = document.getElementById('lbFigure');
+      document.getElementById('lbTotal').textContent = pad(PHOTOS.length);
+
+      let index = 0;
+      let isOpen = false;
+
+      /* Where the photo actually sits inside the viewer (object-fit: contain) */
+      function fittedBox(p) {
+        const f = lbFig.getBoundingClientRect();
+        const scale = Math.min(f.width / p.w, f.height / p.h);
+        const w = p.w * scale, h = p.h * scale;
+        return { left: f.left + (f.width - w) / 2, top: f.top + (f.height - h) / 2, w, h };
+      }
+
+      /* Point srcset/sizes at photo i so the browser downloads the right size */
+      function setSource(img, i) {
+        const p = PHOTOS[i];
+        img.sizes = `${Math.ceil(fittedBox(p).w)}px`;
+        img.srcset = srcset(p, [1200, 2400]);
+        img.src = `${IMAGE_DIR}${p.n}-1200.webp`;
+      }
+
+      function preload(i) { setSource(new Image(), i); }
+
+      function show(i) {
+        index = (i + PHOTOS.length) % PHOTOS.length;
+        lbImg.classList.remove('loaded');
+        lbImg.onload = () => lbImg.classList.add('loaded');
+        setSource(lbImg, index);
+        lbImg.alt = `${data.heading} — photograph ${index + 1} of ${PHOTOS.length}`;
+        lbCur.textContent = pad(index + 1);
+        preload((index + 1) % PHOTOS.length);
+        preload((index - 1 + PHOTOS.length) % PHOTOS.length);
+      }
+
+      function open(i) {
+        isOpen = true;
+        show(i);
+        lb.classList.add('open');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('lb-open');
+        lbClose.focus();
+      }
+
+      function close() {
+        if (!isOpen) return;
+        isOpen = false;
+        lb.classList.remove('open');
+        lb.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('lb-open');
+        tiles[index].focus();                   // return to the last photo viewed
+      }
+
+      lbClose.addEventListener('click', close);
+      lbPrev.addEventListener('click', () => show(index - 1));
+      lbNext.addEventListener('click', () => show(index + 1));
+
+      /* Click on the dark backdrop (not the photo or buttons) closes.
+         The <img> box fills the viewer, so check against the visible photo. */
+      lb.addEventListener('click', e => {
+        if (e.target === lb || e.target === lbFig) return close();
+        if (e.target === lbImg) {
+          const b = fittedBox(PHOTOS[index]);
+          const inside = e.clientX >= b.left && e.clientX <= b.left + b.w &&
+                         e.clientY >= b.top  && e.clientY <= b.top + b.h;
+          if (!inside) close();
         }
+      });
 
-        cntTotal.textContent = slides.length || '—';
-        loading.classList.add('hidden');
-
-        if (!slides.length) { showEmpty(); return; }
-
-        if (slides.length < 2) {
-          prevBtn.style.display = 'none';
-          nextBtn.style.display = 'none';
-          dotsWrap.style.display = 'none';
-          fillEl.parentElement.style.display = 'none';
+      document.addEventListener('keydown', e => {
+        if (!isOpen) return;
+        if (e.key === 'Escape')     { close(); }
+        if (e.key === 'ArrowRight') { show(index + 1); }
+        if (e.key === 'ArrowLeft')  { show(index - 1); }
+        if (e.key === 'Tab') {                  // keep focus inside the viewer
+          const f = [lbClose, lbPrev, lbNext];
+          const at = f.indexOf(document.activeElement);
+          e.preventDefault();
+          f[(at + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
         }
+      });
 
-        updateMeta();
-        start();
-      }
-
-      function goTo(index) {
-        if (!slides.length) return;
-        slides[current].classList.remove('active');
-        dots[current]?.classList.remove('active');
-        current = ((index % slides.length) + slides.length) % slides.length;
-        slides[current].classList.add('active');
-        dots[current]?.classList.add('active');
-        updateMeta();
-      }
-      const next = () => goTo(current + 1);
-      const prev = () => goTo(current - 1);
-
-      function updateMeta() {
-        cntCur.textContent = String(current + 1).padStart(2, '0');
-        slideLabel.textContent = `${BASENAME} ${current + 1}`;
-      }
-
-      function animateFill() {
-        fillEl.style.transition = 'none';
-        fillEl.style.transform  = 'scaleX(0)';
-        void fillEl.offsetWidth;
-        fillEl.style.transition = `transform ${INTERVAL}ms linear`;
-        fillEl.style.transform  = 'scaleX(1)';
-      }
-
-      function start() {
-        stop();
-        if (slides.length < 2 || paused) return;
-        animateFill();
-        timer = setInterval(() => { next(); animateFill(); }, INTERVAL);
-      }
-      function stop() { clearInterval(timer); timer = null; fillEl.style.transition = 'none'; }
-      function restart() { start(); }
-
-      function wireControls() {
-        prevBtn.addEventListener('click', () => { prev(); restart(); });
-        nextBtn.addEventListener('click', () => { next(); restart(); });
-
-        const hero = document.getElementById('heroSection');
-        hero.addEventListener('mouseenter', () => { paused = true;  stop(); });
-        hero.addEventListener('mouseleave', () => { paused = false; start(); });
-
-        document.addEventListener('visibilitychange', () => {
-          document.hidden ? stop() : start();
-        });
-
-        document.addEventListener('keydown', e => {
-          if (e.key === 'ArrowRight') { next(); restart(); }
-          if (e.key === 'ArrowLeft')  { prev(); restart(); }
-        });
-
-        let x0 = null;
-        hero.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
-        hero.addEventListener('touchend', e => {
-          if (x0 === null) return;
-          const dx = e.changedTouches[0].clientX - x0;
-          if (dx >  44) { prev(); restart(); }
-          if (dx < -44) { next(); restart(); }
-          x0 = null;
-        }, { passive: true });
-      }
-
-      function showEmpty() {
-        const msg = document.createElement('div');
-        Object.assign(msg.style, {
-          position: 'absolute', inset: '0', display: 'grid', placeItems: 'center',
-          color: 'rgba(242,237,230,0.4)', letterSpacing: '.18em',
-          textTransform: 'uppercase', fontSize: '0.7rem',
-        });
-        msg.textContent = `No images found · Add slides to ${IMAGE_DIR}`;
-        stage.appendChild(msg);
-        [prevBtn, nextBtn, dotsWrap, fillEl.parentElement, cntCur.parentElement, slideLabel]
-          .forEach(el => el && (el.style.display = 'none'));
-      }
-
-      loadAll().then(wireControls);
+      let x0 = null;
+      lb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+      lb.addEventListener('touchend', e => {
+        if (x0 === null) return;
+        const dx = e.changedTouches[0].clientX - x0;
+        if (dx >  44) show(index - 1);
+        if (dx < -44) show(index + 1);
+        x0 = null;
+      }, { passive: true });
     })();
   </script>
 
