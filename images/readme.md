@@ -19,5 +19,6 @@ To add or change photos:
   2. Run:  python tools/optimize_images.py
   3. Commit and push the changed files in images/ and portfolio/gallery-images.js
 
-Gallery slides are picked up automatically. For the home page hero,
-add or remove the matching <div data-img="images/heroN"> line in index.html.
+Gallery slides and home page hero slides are both picked up automatically
+(the script rewrites the hero slides in index.html between its
+HERO-SLIDES markers — don't edit those lines by hand).
